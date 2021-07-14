@@ -23,9 +23,11 @@ class SimpleParametrizedWithPythonSdkTest :
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{index}: ({0}, {1})")
-        fun getTestData() = getInAndOutArray(::SimpleParametrizedTestTest,
+        fun getTestData() = getInAndOutArray(
+            ::SimpleParametrizedTestTest,
             inExtension = Extension.PY,
-            outExtension = Extension.PY)
+            outExtension = Extension.PY
+        )
     }
 
     @Test
