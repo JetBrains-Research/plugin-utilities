@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-group = "org.jetbrains.research.ml.pluginUtilities"
+group = "org.jetbrains.research.pluginUtilities"
 version = "1.0"
 
 fun properties(key: String) = project.findProperty(key).toString()
