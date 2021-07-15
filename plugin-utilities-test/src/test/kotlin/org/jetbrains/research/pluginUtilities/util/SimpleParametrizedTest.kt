@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.pluginUtilities.util
+package org.jetbrains.research.pluginUtilities.util
 
 import org.junit.Assert
 import org.junit.Test

@@ -1,11 +1,11 @@
-package org.jetbrains.research.ml.pluginUtilities.util
+package org.jetbrains.research.pluginUtilities.util
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.roots.ProjectRootManager
-import org.jetbrains.research.ml.pluginUtilities.sdk.PythonMockSdk
-import org.jetbrains.research.ml.pluginUtilities.sdk.SdkConfigurer
+import org.jetbrains.research.pluginUtilities.sdk.PythonMockSdk
+import org.jetbrains.research.pluginUtilities.sdk.SdkConfigurer
 import org.junit.Ignore
 
 /*

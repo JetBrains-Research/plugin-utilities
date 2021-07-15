@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.pluginUtilities.util
+package org.jetbrains.research.pluginUtilities.util
 
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture

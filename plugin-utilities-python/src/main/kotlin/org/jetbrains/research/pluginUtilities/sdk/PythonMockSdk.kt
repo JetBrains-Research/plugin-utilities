@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.pluginUtilities.sdk
+package org.jetbrains.research.pluginUtilities.sdk
 
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.projectRoots.SdkAdditionalData

@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.pluginUtilities.util
+package org.jetbrains.research.pluginUtilities.util
 
 import com.jetbrains.python.psi.PyFile
 import com.jetbrains.python.psi.impl.PyBuiltinCache
