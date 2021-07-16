@@ -77,8 +77,8 @@ fun getPsiFile(file: File, fixture: CodeInsightTestFixture): PsiFile {
  * @throws AssertionError if directories do not have the same contents
  */
 fun assertDirectoriesEqual(dir1: File, dir2: File) {
-    val files1 = dir1.listFiles()?.sorted() ?: error("$dir1 is not a directory")
-    val files2 = dir2.listFiles()?.sorted() ?: error("$dir2 is not a directory")
+    val files1 = dir1.listFiles()?.sortedBy { it.name } ?: error("$dir1 is not a directory")
+    val files2 = dir2.listFiles()?.sortedBy { it.name } ?: error("$dir2 is not a directory")
 
     for ((file1, file2) in files1.zip(files2)) {
         if (file1.isFile && file2.isFile) {

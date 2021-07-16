@@ -11,7 +11,7 @@ internal class AndroidSdkPreprocessingTest {
     val preprocessor = Preprocessor(listOf(AndroidSdkPreprocessing(ANDROID_SDK_PATH)))
 
     private fun runPreprocessing(projectName: String) {
-        val resources = File("src/test/resources/org/jetbrains/research/pluginUtilities/util/java_mock_projects")
+        val resources = File("src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects")
         val repoDirectory = resources.resolve(projectName)
         val expectedOutputDirectory = resources.resolve("preprocessed_$projectName")
         assertCorrectPreprocessing(repoDirectory, expectedOutputDirectory)
