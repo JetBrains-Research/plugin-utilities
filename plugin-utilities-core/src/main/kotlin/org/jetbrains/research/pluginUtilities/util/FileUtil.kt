@@ -2,7 +2,6 @@ package org.jetbrains.research.pluginUtilities.util
 
 import java.io.File
 import java.nio.file.Files
-import java.util.concurrent.TimeUnit
 import kotlin.streams.toList
 
 enum class Extension(val value: String) {
