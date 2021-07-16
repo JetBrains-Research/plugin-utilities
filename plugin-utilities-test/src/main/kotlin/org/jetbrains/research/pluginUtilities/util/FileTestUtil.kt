@@ -71,3 +71,32 @@ object FileTestUtil {
 fun getPsiFile(file: File, fixture: CodeInsightTestFixture): PsiFile {
     return fixture.configureByFile(file.path)
 }
+
+/**
+ * Checks if 2 directories have the same contents
+ * @throws AssertionError if directories do not have the same contents
+ */
+fun assertDirectoriesEqual(dir1: File, dir2: File) {
+    val files1 = dir1.listFiles()?.sorted() ?: error("$dir1 is not a directory")
+    val files2 = dir2.listFiles()?.sorted() ?: error("$dir2 is not a directory")
+
+    for ((file1, file2) in files1.zip(files2)) {
+        if (file1.isFile && file2.isFile) {
+            assertFilesEqual(file1, file2)
+        } else if (file1.isDirectory && file2.isDirectory) {
+            assertDirectoriesEqual(file1, file2)
+        } else {
+            throw AssertionError("$file1 and $file2 are files of different types")
+        }
+    }
+}
+
+/**
+ * Checks if 2 regular files have equal contents
+ * @throws AssertionError if given regular files do not have equal contents
+ */
+fun assertFilesEqual(file1: File, file2: File) {
+    if (!file1.readBytes().contentEquals(file2.readBytes())) {
+        throw AssertionError("Files $file1 and $file2 do not have equal contents")
+    }
+}
