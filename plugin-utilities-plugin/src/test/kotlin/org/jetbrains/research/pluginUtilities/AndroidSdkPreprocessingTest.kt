@@ -3,7 +3,6 @@ package org.jetbrains.research.pluginUtilities
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
 import org.jetbrains.research.pluginUtilities.util.assertDirectoriesEqual
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
