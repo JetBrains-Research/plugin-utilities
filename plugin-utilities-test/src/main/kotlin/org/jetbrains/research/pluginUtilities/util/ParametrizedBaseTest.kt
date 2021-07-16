@@ -31,12 +31,14 @@ open class ParametrizedBaseTest(private val testDataRoot: String) : BasePlatform
             inExtension: Extension = Extension.KT,
             outExtension: Extension? = Extension.KT
         ): List<Array<File>> {
-            val inAndOutFilesMap = FileTestUtil.getInAndOutFilesMap(
+            val inAndOutFilesMap = FileTestUtil.getInAndOutDataMap(
                 getResourcesRootPath(cls, resourcesRootName),
-                inFormat = TestFileFormat("in", inExtension, Type.Input),
-                outFormat = outExtension?.let { TestFileFormat("out", outExtension, Type.Output) } ?: null
+                inFormat = TestDataFormat("in", inExtension, Type.Input),
+                outFormat = outExtension?.let { TestDataFormat("out", outExtension, Type.Output) }
             )
-            return inAndOutFilesMap.entries.map { (inFile, outFile) -> arrayOf(inFile, outFile!!) }
+            return inAndOutFilesMap.entries.map { (inFile, outFile) ->
+                outFile?.let { arrayOf(inFile, outFile) } ?: arrayOf(inFile)
+            }
         }
 
         // We can not get the root of the class resources automatically

@@ -1,7 +1,10 @@
-package org.jetbrains.research.pluginUtilities.util
+package org.jetbrains.research.pluginUtilities.util.sdk
 
 import com.jetbrains.python.psi.PyFile
 import com.jetbrains.python.psi.impl.PyBuiltinCache
+import org.jetbrains.research.pluginUtilities.util.Extension
+import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseWithPythonSdkTest
+import org.jetbrains.research.pluginUtilities.util.getPsiFile
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,7 +13,7 @@ import java.io.File
 
 @RunWith(Parameterized::class)
 class SimpleParametrizedWithPythonSdkTest :
-    ParametrizedBaseWithPythonSdkTest(getResourcesRootPath(::SimpleParametrizedTestTest)) {
+    ParametrizedBaseWithPythonSdkTest(getResourcesRootPath(::SimpleParametrizedWithPythonSdkTest)) {
 
     @JvmField
     @Parameterized.Parameter(0)
@@ -24,7 +27,7 @@ class SimpleParametrizedWithPythonSdkTest :
         @JvmStatic
         @Parameterized.Parameters(name = "{index}: ({0}, {1})")
         fun getTestData() = getInAndOutArray(
-            ::SimpleParametrizedTestTest,
+            ::ParametrizedBaseWithPythonSdkTest,
             inExtension = Extension.PY,
             outExtension = Extension.PY
         )
@@ -34,7 +37,7 @@ class SimpleParametrizedWithPythonSdkTest :
     fun simpleTest() {
         val inPsiFile = getPsiFile(inFile!!, myFixture) as PyFile
         val outPsiFile = getPsiFile(outFile!!, myFixture) as PyFile
-        Assert.assertEquals(inPsiFile.text, outPsiFile.text)
+        Assert.assertEquals(outPsiFile.text, inPsiFile.text)
     }
 
     @Test
