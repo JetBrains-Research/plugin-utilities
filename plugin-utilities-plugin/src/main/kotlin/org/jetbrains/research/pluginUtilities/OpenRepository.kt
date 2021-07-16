@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.pluginUtilities
+package org.jetbrains.research.pluginUtilities
 
 import com.intellij.ide.impl.ProjectUtil
 import com.intellij.openapi.application.ApplicationManager
@@ -9,17 +9,18 @@ import com.intellij.openapi.project.ex.ProjectManagerEx
 import com.intellij.serviceContainer.AlreadyDisposedException
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.util.GradleConstants
-import org.jetbrains.research.pluginUtilities.BuildSystem
-import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import java.io.File
+import java.util.logging.Logger
 
-inline fun openRepository(repoDirectory: File, acceptedBuildSystems: List<BuildSystem>, action: (Project) -> Unit) {
+private val LOG = Logger.getLogger("OpenRepository")
+
+fun openRepository(repoDirectory: File, acceptedBuildSystems: List<BuildSystem>, action: (Project) -> Unit) {
     val projectRoots = repoDirectory.collectBuildSystemRoots(acceptedBuildSystems)
     for (projectRoot in projectRoots) {
         val project = try {
             openSingleProject(projectRoot)
         } catch (e: Exception) {
-            println("Failed to open project $projectRoot: $e")
+            LOG.warning("Failed to open project $projectRoot: $e")
             continue
         }
         action(project)
@@ -28,18 +29,18 @@ inline fun openRepository(repoDirectory: File, acceptedBuildSystems: List<BuildS
 }
 
 fun openSingleProject(projectRoot: File): Project {
-    println("Opening project ${projectRoot.name}")
+    LOG.info("Opening project ${projectRoot.name}")
     var resultProject: Project? = null
 
     ApplicationManager.getApplication().invokeAndWait {
         val project = ProjectUtil.openOrImport(projectRoot.toPath())
 
         if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
-            println("It is a Maven project")
+            LOG.info("It is a Maven project")
             MavenProjectsManager.getInstance(project).scheduleImportAndResolve()
             MavenProjectsManager.getInstance(project).importProjects()
         } else {
-            println("It is a Gradle project")
+            LOG.info("It is a Gradle project")
             ExternalSystemUtil.refreshProject(
                 projectRoot.path,
                 ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
@@ -48,7 +49,7 @@ fun openSingleProject(projectRoot: File): Project {
         resultProject = project
     }
 
-    return resultProject?.also { println("Project ${it.name} opened") } ?: error("Project was null for some unknown reason")
+    return resultProject?.also { LOG.info("Project ${it.name} opened") } ?: error("Project was null for some unknown reason")
 }
 
 /**
@@ -59,5 +60,5 @@ fun closeSingleProject(project: Project) =
         ProjectManagerEx.getInstanceEx().forceCloseProject(project)
     } catch (e: AlreadyDisposedException) {
         // TODO: figure out why this happened
-        println(e.message)
+        LOG.warning("Failed to close project: ${e.message}")
     }
