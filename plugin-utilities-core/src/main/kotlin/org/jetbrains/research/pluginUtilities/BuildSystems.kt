@@ -8,10 +8,8 @@ enum class BuildSystem(val buildFile: String) {
     Gradle("build.gradle"),
 }
 
-val javaBuildSystems = listOf(BuildSystem.Maven, BuildSystem.Gradle)
-
 /**
- * Looks for a build file in the given directory and detects the build system
+ * Search for a build file in the given directory and detect the build system
  */
 fun File.detectBuildSystem(): BuildSystem? =
     BuildSystem.values().find { buildSystem -> resolve(buildSystem.buildFile).exists() }
@@ -40,4 +38,4 @@ fun File.collectBuildSystemRoots(acceptedBuildSystems: List<BuildSystem> = Build
         }
     }.toList()
 
-fun File.collectJavaProjectRoots(): List<File> = collectBuildSystemRoots(javaBuildSystems)
+fun File.collectJavaProjectRoots(): List<File> = collectBuildSystemRoots(listOf(BuildSystem.Maven, BuildSystem.Gradle))
