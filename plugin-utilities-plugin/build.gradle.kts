@@ -6,7 +6,7 @@ dependencies {
 }
 
 // TODO: move into the project
-open class CliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
+open class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Name of the runner
     @get:Input
     val runner: String? by project
@@ -33,7 +33,7 @@ open class CliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
 }
 
 tasks {
-    register<CliTask>("cli") {
+    register<IOCliTask>("ioCli") {
         dependsOn("buildPlugin")
         args = listOfNotNull(
             runner,
