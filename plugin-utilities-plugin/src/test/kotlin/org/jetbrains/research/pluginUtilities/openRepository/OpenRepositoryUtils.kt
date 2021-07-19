@@ -1,4 +1,4 @@
-package org.jetbrains.research.pluginUtilities
+package org.jetbrains.research.pluginUtilities.openRepository
 
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager

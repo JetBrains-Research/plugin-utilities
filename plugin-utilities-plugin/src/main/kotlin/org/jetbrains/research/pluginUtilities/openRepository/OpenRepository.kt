@@ -1,4 +1,4 @@
-package org.jetbrains.research.pluginUtilities
+package org.jetbrains.research.pluginUtilities.openRepository
 
 import com.intellij.ide.impl.ProjectUtil
 import com.intellij.openapi.application.ApplicationManager
@@ -9,6 +9,9 @@ import com.intellij.openapi.project.ex.ProjectManagerEx
 import com.intellij.serviceContainer.AlreadyDisposedException
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.util.GradleConstants
+import org.jetbrains.research.pluginUtilities.BuildSystem
+import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
+import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
 import java.io.File
 import java.nio.file.Files
 import java.util.logging.Logger
