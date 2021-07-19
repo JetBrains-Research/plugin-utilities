@@ -41,9 +41,15 @@ class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Prep
     private val LOG = Logger.getLogger(javaClass.name)
 
     override val name: String = "Add Android SDK with local.properties"
+
+    companion object {
+        const val LOCAL_PROPERTIES_FILE_NAME = "local.properties"
+        const val SDK_PROPERTY_NAME = "sdk.dir"
+    }
+
     override fun preprocess(repoDirectory: File) {
         repoDirectory.collectJavaProjectRoots().forEach { projectRoot ->
-            LOG.info("Adding local.properties to ${projectRoot.path}")
+            LOG.info("Updating $LOCAL_PROPERTIES_FILE_NAME in ${projectRoot.path}")
             updateLocalProperties(projectRoot)
         }
     }
@@ -54,14 +60,14 @@ class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Prep
      * Creates a new file with the new property otherwise.
      */
     private fun updateLocalProperties(projectRoot: File) {
-        val localPropertiesFile = projectRoot.resolve("local.properties")
+        val localPropertiesFile = projectRoot.resolve(LOCAL_PROPERTIES_FILE_NAME)
         val properties = Properties()
         if (localPropertiesFile.exists()) {
             properties.load(localPropertiesFile.inputStream())
         } else {
             localPropertiesFile.createNewFile()
         }
-        properties.setProperty("sdk.dir", androidSdkAbsolutePath)
+        properties.setProperty(SDK_PROPERTY_NAME, androidSdkAbsolutePath)
         properties.store(localPropertiesFile.outputStream(), null)
     }
 }
