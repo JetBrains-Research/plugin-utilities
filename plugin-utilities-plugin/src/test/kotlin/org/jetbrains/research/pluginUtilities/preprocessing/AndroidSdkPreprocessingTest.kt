@@ -39,11 +39,15 @@ class AndroidSdkPreprocessingTest :
      */
     private fun assertLocalProperties(repoDirectory: File) {
         repoDirectory.collectJavaProjectRoots().forEach { projectRoot ->
-            val localPropertiesFile = projectRoot.resolve("local.properties")
-            assert(localPropertiesFile.exists()) { "local.properties file does not exist" }
+            val localPropertiesFile = projectRoot.resolve(AndroidSdkPreprocessing.LOCAL_PROPERTIES_FILE_NAME)
+            assert(localPropertiesFile.exists()) {
+                "${AndroidSdkPreprocessing.LOCAL_PROPERTIES_FILE_NAME} file does not exist"
+            }
             val properties = Properties()
             properties.load(localPropertiesFile.inputStream())
-            assert(properties["sdk.dir"] == ANDROID_SDK_PATH) { "sdk.dir property is not set correctly" }
+            assert(properties[AndroidSdkPreprocessing.SDK_PROPERTY_NAME] == ANDROID_SDK_PATH) {
+                "${AndroidSdkPreprocessing.SDK_PROPERTY_NAME} property is not set correctly"
+            }
         }
     }
 
