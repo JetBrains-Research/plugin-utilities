@@ -1,6 +1,8 @@
-package org.jetbrains.research.pluginUtilities
+package org.jetbrains.research.pluginUtilities.preprocessing
 
+import org.jetbrains.research.pluginUtilities.collectJavaProjectRoots
 import java.io.File
+import java.util.Properties
 import java.util.logging.Logger
 
 /**
@@ -15,7 +17,7 @@ class Preprocessor(private val preprocessings: List<Preprocessing>) {
      */
     fun preprocess(repoDirectory: File, outputDirectory: File) {
         repoDirectory.copyRecursively(outputDirectory)
-        for (preprocessing in preprocessings) {
+        preprocessings.forEach { preprocessing ->
             LOG.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
             preprocessing.preprocess(outputDirectory)
         }
@@ -23,7 +25,9 @@ class Preprocessor(private val preprocessings: List<Preprocessing>) {
 }
 
 /**
- * Object that preprocesses a given repository by mutating its file tree
+ * Object that preprocesses a given repository by mutating its file tree.
+ * For example, it can add new files to the repository, remove or change the existing ones.
+ * @property name The name of the preprocessing that is used for debugging and logging
  */
 interface Preprocessing {
     val name: String
@@ -38,19 +42,26 @@ class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Prep
 
     override val name: String = "Add Android SDK with local.properties"
     override fun preprocess(repoDirectory: File) {
-        for (projectRoot in repoDirectory.collectJavaProjectRoots()) {
+        repoDirectory.collectJavaProjectRoots().forEach { projectRoot ->
             LOG.info("Adding local.properties to ${projectRoot.path}")
-            createLocalPropertiesFile(projectRoot)
+            updateLocalProperties(projectRoot)
         }
     }
 
-    private fun createLocalPropertiesFile(projectRoot: File) {
+    /**
+     * Sets the `sdk.dir` property in the local.properties file.
+     * If the file already exists, modifies it by adding the `sdk.dir` property or changing the existing value.
+     * Creates a new file with the new property otherwise.
+     */
+    private fun updateLocalProperties(projectRoot: File) {
         val localPropertiesFile = projectRoot.resolve("local.properties")
-        localPropertiesFile.createNewFile()
-        localPropertiesFile.writeText(
-            """
-            sdk.dir=$androidSdkAbsolutePath
-            """.trimIndent()
-        )
+        val properties = Properties()
+        if (localPropertiesFile.exists()) {
+            properties.load(localPropertiesFile.inputStream())
+        } else {
+            localPropertiesFile.createNewFile()
+        }
+        properties.setProperty("sdk.dir", androidSdkAbsolutePath)
+        properties.store(localPropertiesFile.outputStream(), null)
     }
 }
