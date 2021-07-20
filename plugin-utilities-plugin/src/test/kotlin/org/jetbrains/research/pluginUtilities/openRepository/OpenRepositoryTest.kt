@@ -15,6 +15,7 @@ import java.io.File
 
 const val ANDROID_SDK_PATH = "/Users/path/to/sdk"
 
+// TODO: fix the tests
 @Ignore("""
     For some reason these tests do not pass. However, in headless mode all projects open fine.
     To save some time, all tests are implemented as a CLI runner for now.

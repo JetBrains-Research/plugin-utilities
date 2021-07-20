@@ -32,12 +32,10 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
      */
     fun openRepository(repoDirectory: File, action: (Project) -> Unit): Boolean {
         logger.info("Opening repository $repoDirectory")
+        val projectRoots = preprocessRepository(repoDirectory).collectBuildSystemRoots(acceptedBuildSystems)
+        logger.info("Found project roots $projectRoots")
 
         var allProjectsOpenedSuccessfully = true
-
-        val projectRoots = preprocessRepository(repoDirectory).collectBuildSystemRoots(acceptedBuildSystems)
-
-        logger.info("Found project roots $projectRoots")
 
         for (projectRoot in projectRoots) {
             val project = try {
@@ -62,6 +60,7 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
         return tempDirectory
     }
 
+    // TODO: refactor this mess
     private fun openSingleProject(projectRoot: File): Project {
         logger.info("Opening project ${projectRoot.name}")
         var resultProject: Project? = null
