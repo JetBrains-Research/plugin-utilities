@@ -52,6 +52,9 @@ allprojects {
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = "11"
         }
+        compileTestKotlin {
+            kotlinOptions.jvmTarget = "11"
+        }
         withType<org.jetbrains.intellij.tasks.BuildSearchableOptionsTask>()
             .forEach { it.enabled = false }
     }
