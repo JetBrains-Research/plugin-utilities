@@ -12,9 +12,9 @@ import org.jetbrains.plugins.gradle.util.GradleConstants
 import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Files
-import java.util.logging.Logger
 
 /**
  * Preprocesses repositories and opens projects in them.
@@ -22,8 +22,7 @@ import java.util.logging.Logger
  * Each repository may contain several projects, it locates them with [collectBuildSystemRoots] and [acceptedBuildSystems]
  */
 class RepositoryOpener(private val preprocessor: Preprocessor, private val acceptedBuildSystems: List<BuildSystem>) {
-
-    private val LOG = Logger.getLogger(javaClass.name)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     /**
      * Preprocesses repository and opens all projects inside of it.
@@ -32,14 +31,19 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
      * @returns true if and only if all projects were opened successfully.
      */
     fun openRepository(repoDirectory: File, action: (Project) -> Unit): Boolean {
+        logger.info("Opening repository $repoDirectory")
+
         var allProjectsOpenedSuccessfully = true
 
         val projectRoots = preprocessRepository(repoDirectory).collectBuildSystemRoots(acceptedBuildSystems)
+
+        logger.info("Found project roots $projectRoots")
+
         for (projectRoot in projectRoots) {
             val project = try {
                 openSingleProject(projectRoot)
             } catch (e: Exception) {
-                LOG.warning("Failed to open project $projectRoot: $e")
+                logger.error("Failed to open project ${projectRoot.path}", e)
                 allProjectsOpenedSuccessfully = false
                 continue
             }
@@ -59,18 +63,18 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
     }
 
     private fun openSingleProject(projectRoot: File): Project {
-        LOG.info("Opening project ${projectRoot.name}")
+        logger.info("Opening project ${projectRoot.name}")
         var resultProject: Project? = null
 
         ApplicationManager.getApplication().invokeAndWait {
             val project = ProjectUtil.openOrImport(projectRoot.toPath())
 
             if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
-                LOG.info("It is a Maven project")
+                logger.info("It is a Maven project")
                 MavenProjectsManager.getInstance(project).scheduleImportAndResolve()
                 MavenProjectsManager.getInstance(project).importProjects()
             } else {
-                LOG.info("It is a Gradle project")
+                logger.info("It is a Gradle project")
                 ExternalSystemUtil.refreshProject(
                     projectRoot.path,
                     ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
@@ -79,7 +83,7 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
             resultProject = project
         }
 
-        return resultProject?.also { LOG.info("Project ${it.name} opened") } ?: error("Project was null for some unknown reason")
+        return resultProject?.also { logger.info("Project ${it.name} opened") } ?: error("Project was null for some unknown reason")
     }
 
     /**
@@ -90,6 +94,6 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
             ProjectManagerEx.getInstanceEx().forceCloseProject(project)
         } catch (e: AlreadyDisposedException) {
             // TODO: figure out why this happened
-            LOG.warning("Failed to close project: ${e.message}")
+            logger.error("Failed to close project", e)
         }
 }
