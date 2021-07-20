@@ -12,6 +12,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <!--Add starters here-->
         <appStarter implementation="org.jetbrains.research.pluginUtilities.CliRunnerExample"/>
+        <appStarter implementation="org.jetbrains.research.pluginUtilities.openRepository.OpenRepositoryRunner"/>
     </extensions>
 
 </idea-plugin>
