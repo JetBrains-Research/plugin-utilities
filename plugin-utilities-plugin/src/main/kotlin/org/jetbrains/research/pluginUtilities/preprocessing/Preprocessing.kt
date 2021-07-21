@@ -1,6 +1,10 @@
 package org.jetbrains.research.pluginUtilities.preprocessing
 
-import org.jetbrains.research.pluginUtilities.collectJavaProjectRoots
+import org.apache.commons.io.FileUtils.deleteDirectory
+import org.jetbrains.research.pluginUtilities.BuildSystem
+import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
+import org.jetbrains.research.pluginUtilities.util.subdirectories
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.Properties
 import java.util.logging.Logger
@@ -9,7 +13,7 @@ import java.util.logging.Logger
  * Runs multiple preprosessings
  */
 class Preprocessor(private val preprocessings: List<Preprocessing>) {
-    private val LOG = Logger.getLogger(javaClass.name)
+    private val logger = Logger.getLogger(javaClass.name)
 
     /**
      * Preprocesses repository in [repoDirectory] by copying it to [outputDirectory].
@@ -18,7 +22,7 @@ class Preprocessor(private val preprocessings: List<Preprocessing>) {
     fun preprocess(repoDirectory: File, outputDirectory: File) {
         repoDirectory.copyRecursively(outputDirectory)
         preprocessings.forEach { preprocessing ->
-            LOG.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
+            logger.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
             preprocessing.preprocess(outputDirectory)
         }
     }
@@ -38,18 +42,19 @@ interface Preprocessing {
  * Adds local.properties files with sdk.dir=[androidSdkAbsolutePath] where it detects a Java build system
  */
 class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Preprocessing {
-    private val LOG = Logger.getLogger(javaClass.name)
+    private val logger = Logger.getLogger(javaClass.name)
 
     override val name: String = "Add Android SDK with local.properties"
 
     companion object {
         const val LOCAL_PROPERTIES_FILE_NAME = "local.properties"
         const val SDK_PROPERTY_NAME = "sdk.dir"
+        val acceptedBuildSystems = listOf(BuildSystem.Gradle)
     }
 
     override fun preprocess(repoDirectory: File) {
-        repoDirectory.collectJavaProjectRoots().forEach { projectRoot ->
-            LOG.info("Updating $LOCAL_PROPERTIES_FILE_NAME in ${projectRoot.path}")
+        repoDirectory.collectBuildSystemRoots(acceptedBuildSystems).forEach { projectRoot ->
+            logger.info("Updating $LOCAL_PROPERTIES_FILE_NAME in ${projectRoot.path}")
             updateLocalProperties(projectRoot)
         }
     }
@@ -69,5 +74,30 @@ class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Prep
         }
         properties.setProperty(SDK_PROPERTY_NAME, androidSdkAbsolutePath)
         properties.store(localPropertiesFile.outputStream(), null)
+    }
+}
+
+/**
+ * Removed directories from repositories with names [directoryNames]
+ * @param directoryNames The names of directories which are to be removed
+ */
+class DeleteDirectoriesPreprocessing(private val directoryNames: List<String>) : Preprocessing {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
+    override val name: String = "Delete directories"
+
+    override fun preprocess(repoDirectory: File) {
+        removeIdeaDirectories(repoDirectory)
+    }
+
+    private fun removeIdeaDirectories(directory: File) {
+        for (subdirectory in directory.subdirectories) {
+            if (subdirectory.name in directoryNames) {
+                logger.info("Deleting ${subdirectory.name} folder: ${subdirectory.path}")
+                deleteDirectory(subdirectory)
+            } else {
+                removeIdeaDirectories(subdirectory)
+            }
+        }
     }
 }
