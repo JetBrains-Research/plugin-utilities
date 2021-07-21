@@ -8,6 +8,7 @@ import com.intellij.openapi.application.ApplicationStarter
 import org.apache.commons.io.FileUtils.cleanDirectory
 import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.preprocessing.AndroidSdkPreprocessing
+import org.jetbrains.research.pluginUtilities.preprocessing.DeleteDirectoriesPreprocessing
 import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.slf4j.LoggerFactory
@@ -45,7 +46,10 @@ class TestOpenJavaCommand : CliktCommand() {
     }
 
     private fun preprocessRepositories() {
-        val preprocessor = Preprocessor(listOf(AndroidSdkPreprocessing(androidSdk)))
+        val preprocessor = Preprocessor(listOf(
+            AndroidSdkPreprocessing(androidSdk),
+            DeleteDirectoriesPreprocessing(listOf(".idea"))
+        ))
 
         for (repositoryRoot in input.subdirectories) {
             val repositoryOutput = preprocessOutput.resolve(repositoryRoot.name)
