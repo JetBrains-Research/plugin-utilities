@@ -49,10 +49,11 @@ class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Prep
     companion object {
         const val LOCAL_PROPERTIES_FILE_NAME = "local.properties"
         const val SDK_PROPERTY_NAME = "sdk.dir"
+        val acceptedBuildSystems = listOf(BuildSystem.Gradle)
     }
 
     override fun preprocess(repoDirectory: File) {
-        repoDirectory.collectBuildSystemRoots(BuildSystem.Gradle).forEach { projectRoot ->
+        repoDirectory.collectBuildSystemRoots(acceptedBuildSystems).forEach { projectRoot ->
             logger.info("Updating $LOCAL_PROPERTIES_FILE_NAME in ${projectRoot.path}")
             updateLocalProperties(projectRoot)
         }
