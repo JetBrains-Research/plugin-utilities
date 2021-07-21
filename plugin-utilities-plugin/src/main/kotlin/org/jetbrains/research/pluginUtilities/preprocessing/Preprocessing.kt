@@ -9,7 +9,7 @@ import java.util.logging.Logger
  * Runs multiple preprosessings
  */
 class Preprocessor(private val preprocessings: List<Preprocessing>) {
-    private val LOG = Logger.getLogger(javaClass.name)
+    private val logger = Logger.getLogger(javaClass.name)
 
     /**
      * Preprocesses repository in [repoDirectory] by copying it to [outputDirectory].
@@ -18,7 +18,7 @@ class Preprocessor(private val preprocessings: List<Preprocessing>) {
     fun preprocess(repoDirectory: File, outputDirectory: File) {
         repoDirectory.copyRecursively(outputDirectory)
         preprocessings.forEach { preprocessing ->
-            LOG.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
+            logger.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
             preprocessing.preprocess(outputDirectory)
         }
     }
