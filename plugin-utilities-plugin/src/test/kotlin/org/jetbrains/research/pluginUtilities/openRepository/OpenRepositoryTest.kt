@@ -27,8 +27,7 @@ class OpenRepositoryTest :
     private val buildSystems = listOf(BuildSystem.Maven, BuildSystem.Gradle)
     private val preprocessing = listOf<Preprocessing>(AndroidSdkPreprocessing(ANDROID_SDK_PATH))
 
-    private val preprocessor = Preprocessor(preprocessing)
-    private val repositoryOpener = RepositoryOpener(preprocessor, buildSystems)
+    private val repositoryOpener = RepositoryOpener(buildSystems)
 
     @JvmField
     @Parameterized.Parameter(0)

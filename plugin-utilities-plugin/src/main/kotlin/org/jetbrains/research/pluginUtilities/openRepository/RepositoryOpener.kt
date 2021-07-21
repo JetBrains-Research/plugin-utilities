@@ -17,22 +17,21 @@ import java.io.File
 import java.nio.file.Files
 
 /**
- * Preprocesses repositories and opens projects in them.
- * Repositories are preprocessed with [preprocessor]
+ * Locates projects in repositories and opens them.
  * Each repository may contain several projects, it locates them with [collectBuildSystemRoots] and [acceptedBuildSystems]
  */
-class RepositoryOpener(private val preprocessor: Preprocessor, private val acceptedBuildSystems: List<BuildSystem>) {
+class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     /**
-     * Preprocesses repository and opens all projects inside of it.
+     * Opens all projects inside of the repository.
      * @param repoDirectory root of the repository
      * @param action the function that is called for each opened project
      * @returns true if and only if all projects were opened successfully.
      */
     fun openRepository(repoDirectory: File, action: (Project) -> Unit): Boolean {
         logger.info("Opening repository $repoDirectory")
-        val projectRoots = preprocessRepository(repoDirectory).collectBuildSystemRoots(acceptedBuildSystems)
+        val projectRoots = repoDirectory.collectBuildSystemRoots(acceptedBuildSystems)
         logger.info("Found project roots $projectRoots")
 
         var allProjectsOpenedSuccessfully = true
@@ -49,15 +48,6 @@ class RepositoryOpener(private val preprocessor: Preprocessor, private val accep
             closeSingleProject(project)
         }
         return allProjectsOpenedSuccessfully
-    }
-
-    private fun preprocessRepository(repoDirectory: File): File {
-        // The .resolve(..) part is needed so the temp directory name matches the name of the repoDirectory
-        // For the purpose of being more user-friendly
-        val tempDirectory = Files.createTempDirectory("preprocessed_before_open").toFile().resolve(repoDirectory.name)
-        tempDirectory.mkdir()
-        preprocessor.preprocess(repoDirectory, tempDirectory)
-        return tempDirectory
     }
 
     // TODO: refactor this mess
