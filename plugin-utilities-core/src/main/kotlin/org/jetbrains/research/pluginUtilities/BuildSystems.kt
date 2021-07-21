@@ -38,4 +38,5 @@ fun File.collectBuildSystemRoots(acceptedBuildSystems: List<BuildSystem> = Build
         }
     }.toList()
 
-fun File.collectJavaProjectRoots(): List<File> = collectBuildSystemRoots(listOf(BuildSystem.Maven, BuildSystem.Gradle))
+fun File.collectBuildSystemRoots(vararg acceptedBuildSystem: BuildSystem): List<File> =
+    collectBuildSystemRoots(acceptedBuildSystem.asList())
