@@ -1,6 +1,6 @@
 package org.jetbrains.research.pluginUtilities.preprocessing
 
-import org.jetbrains.research.pluginUtilities.collectJavaProjectRoots
+import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
 import org.junit.Test
@@ -38,7 +38,7 @@ class AndroidSdkPreprocessingTest :
      * with the sdk.dir=[ANDROID_SDK_PATH] set
      */
     private fun assertLocalProperties(repoDirectory: File) {
-        repoDirectory.collectJavaProjectRoots().forEach { projectRoot ->
+        repoDirectory.collectBuildSystemRoots(AndroidSdkPreprocessing.acceptedBuildSystems).forEach { projectRoot ->
             val localPropertiesFile = projectRoot.resolve(AndroidSdkPreprocessing.LOCAL_PROPERTIES_FILE_NAME)
             assert(localPropertiesFile.exists()) {
                 "${AndroidSdkPreprocessing.LOCAL_PROPERTIES_FILE_NAME} file does not exist"
