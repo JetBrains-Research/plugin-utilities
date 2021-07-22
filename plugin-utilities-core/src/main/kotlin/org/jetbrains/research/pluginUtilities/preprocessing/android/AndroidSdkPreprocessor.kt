@@ -4,7 +4,7 @@ import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
 import java.io.File
-import java.util.*
+import java.util.Properties
 import java.util.logging.Logger
 
 /**
