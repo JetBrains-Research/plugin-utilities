@@ -37,7 +37,7 @@ open class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     }
 }
 
-open class PreprocessJavaCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
+open class PreprocessKotlinJavaCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Input directory with files
     @get:Input
     val input: String? by project
@@ -73,10 +73,10 @@ tasks {
         )
     }
 
-    register<PreprocessJavaCliTask>("preprocessJava") {
+    register<PreprocessKotlinJavaCliTask>("preprocessKotlinJava") {
         dependsOn("buildPlugin")
         args = listOfNotNull(
-            "preprocessJava",
+            "preprocessKotlinJava",
             input?.let { "--input=$it" },
             output?.let { "--output=$it" },
             androidSdk?.let { "--androidSdk=$it" }

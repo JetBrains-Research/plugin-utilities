@@ -6,16 +6,18 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 import com.intellij.openapi.application.ApplicationStarter
 import org.apache.commons.io.FileUtils.cleanDirectory
+import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPreprocessor
+import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import kotlin.system.exitProcess
 
-fun getJavaPreprocessor(androidSdkAbsolutePath: String) = Preprocessor(
+fun getKotlinJavaPreprocessorManager(androidSdkAbsolutePath: String) = PreprocessorManager(
     listOf(
-        AndroidSdkPreprocessing(androidSdkAbsolutePath),
-        DeleteDirectoriesPreprocessing(listOf(".idea"))
+        AndroidSdkPreprocessor(androidSdkAbsolutePath),
+        DeleteFilesPreprocessor(listOf(".idea"))
     )
 )
 
-class PreprocessJavaCommand : CliktCommand(name = "preprocessJava") {
+class PreprocessKotlinJavaCommand : CliktCommand(name = "preprocessKotlinJava") {
     private val input by option("--input").file(mustExist = true, mustBeReadable = true, canBeFile = false).required()
     private val output by option("--output").file(canBeFile = false).required()
     private val androidSdk by option("--androidSdk").required()
@@ -24,13 +26,13 @@ class PreprocessJavaCommand : CliktCommand(name = "preprocessJava") {
         output.mkdirs()
         cleanDirectory(output)
 
-        val preprocessor = getJavaPreprocessor(androidSdk)
+        val preprocessor = getKotlinJavaPreprocessorManager(androidSdk)
         preprocessor.preprocessDataset(input, output)
         exitProcess(0)
     }
 }
 
-object PreprocessJavaStarter : ApplicationStarter {
-    override fun getCommandName(): String = "preprocessJava"
-    override fun main(args: MutableList<String>) = PreprocessJavaCommand().main(args.drop(1))
+object PreprocessKotlinJavaStarter : ApplicationStarter {
+    override fun getCommandName(): String = "preprocessKotlinJava"
+    override fun main(args: MutableList<String>) = PreprocessKotlinJavaCommand().main(args.drop(1))
 }
