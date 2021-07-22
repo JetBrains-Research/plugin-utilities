@@ -10,13 +10,6 @@ import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPr
 import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import kotlin.system.exitProcess
 
-fun getKotlinJavaPreprocessorManager(androidSdkAbsolutePath: String) = PreprocessorManager(
-    listOf(
-        AndroidSdkPreprocessor(androidSdkAbsolutePath),
-        DeleteFilesPreprocessor(listOf(".idea"))
-    )
-)
-
 class PreprocessKotlinJavaCommand : CliktCommand(name = "preprocessKotlinJava") {
     private val input by option("--input").file(mustExist = true, mustBeReadable = true, canBeFile = false).required()
     private val output by option("--output").file(canBeFile = false).required()
