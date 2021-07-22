@@ -19,11 +19,26 @@ class Preprocessor(private val preprocessings: List<Preprocessing>) {
      * Preprocesses repository in [repoDirectory] by copying it to [outputDirectory].
      * Does not mutate the original repository
      */
-    fun preprocess(repoDirectory: File, outputDirectory: File) {
+    fun preprocessRepository(repoDirectory: File, outputDirectory: File) {
         repoDirectory.copyRecursively(outputDirectory)
         preprocessings.forEach { preprocessing ->
             logger.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
             preprocessing.preprocess(outputDirectory)
+        }
+    }
+
+    /**
+     * Preprocesses a dataset that contains multiple repositories
+     * @param datasetDirectory A directory where each subdirectory is an individual repository
+     * @param outputDirectory A directory where preprocessed repositories will be stored.
+     * For each repository it creates a separate output subdirectory.
+     */
+    fun preprocessDataset(datasetDirectory: File, outputDirectory: File) {
+        for (repositoryRoot in datasetDirectory.subdirectories) {
+            val repositoryOutput = outputDirectory.resolve(repositoryRoot.name)
+            repositoryOutput.mkdir()
+            logger.info("Preprocessing repository ${repositoryRoot.name}")
+            preprocessRepository(repositoryRoot, repositoryOutput)
         }
     }
 }
@@ -49,7 +64,7 @@ class AndroidSdkPreprocessing(private val androidSdkAbsolutePath: String) : Prep
     companion object {
         const val LOCAL_PROPERTIES_FILE_NAME = "local.properties"
         const val SDK_PROPERTY_NAME = "sdk.dir"
-        val acceptedBuildSystems = listOf(BuildSystem.Gradle)
+        val acceptedBuildSystems = listOf(BuildSystem.Gradle, BuildSystem.GradleKotlinDsl)
     }
 
     override fun preprocess(repoDirectory: File) {
