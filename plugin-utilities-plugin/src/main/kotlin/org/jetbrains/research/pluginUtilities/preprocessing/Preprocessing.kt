@@ -102,16 +102,16 @@ class DeleteDirectoriesPreprocessing(private val directoryNames: List<String>) :
     override val name: String = "Delete directories"
 
     override fun preprocess(repoDirectory: File) {
-        removeIdeaDirectories(repoDirectory)
+        removeDirectories(repoDirectory)
     }
 
-    private fun removeIdeaDirectories(directory: File) {
+    private fun removeDirectories(directory: File) {
         for (subdirectory in directory.subdirectories) {
             if (subdirectory.name in directoryNames) {
                 logger.info("Deleting ${subdirectory.name} folder: ${subdirectory.path}")
                 deleteDirectory(subdirectory)
             } else {
-                removeIdeaDirectories(subdirectory)
+                removeDirectories(subdirectory)
             }
         }
     }
