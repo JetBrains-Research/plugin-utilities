@@ -1,0 +1,6 @@
+# Example: list of repositories
+githubRepositories:
+  - url: 'https://github.com/CymChad/BaseRecyclerViewAdapterHelper'
+    commit: '046c2be8c4ae5b5d39177e86d4ffc27bd803ae64'
+  - url: 'https://github.com/JetBrains-Research/plugin-utilities'
+    commit: '7e12709809b3dbb9649d1d17f50a85c416b16520'
