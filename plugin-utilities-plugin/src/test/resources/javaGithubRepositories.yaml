@@ -1,0 +1,17 @@
+githubRepositories:
+  # Android Gradle projects
+
+  - url: 'https://github.com/CymChad/BaseRecyclerViewAdapterHelper'
+    commit: '046c2be8c4ae5b5d39177e86d4ffc27bd803ae64'
+  - url: 'https://github.com/journeyapps/zxing-android-embedded'
+    commit: '40260272fcff4f14181803495e7d370c23e35db7'
+  ## Requires CMake and NDK
+  - url: 'https://github.com/koral--/android-gif-drawable'
+    commit: '3300df03233a53353553643b168e0c5e88f33eae'
+
+  # Maven
+
+  ## IDEA mistakes it for Gradle. Solved by removing the `.idea` folder
+  - url: 'https://github.com/cryptomator/cryptomator'
+    commit: 'd7c70ed8411016ce567a88491c2429dca8783a09'
+
