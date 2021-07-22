@@ -76,3 +76,20 @@ jobs:
           java-version: 11
       - uses: actions/checkout@v2
       - run: ./gradlew ktlintCheck
+
+  open-java-mocks:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Setup Java 11 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - uses: actions/checkout@v2
+      # Download & install the Android SDK.
+      - uses: malinskiy/action-android/install-sdk@release/0.1.2
+      # Set up platform tools like adb.
+      - run: sdkmanager platform-tools
+      # Open mock Java projects
+      - run: ./gradlew androidCli -Prunner="testOpenJava" -Pinput="$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects" -PpreprocessOutput="~/preprocessed_projects" -PandroidSdk="$ANDROID_HOME"
