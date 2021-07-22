@@ -3,7 +3,6 @@ package org.jetbrains.research.pluginUtilities.openRepository
 import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.preprocessing.AndroidSdkPreprocessing
 import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessing
-import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
 import org.junit.Ignore
@@ -12,14 +11,15 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.io.File
 
-
 const val ANDROID_SDK_PATH = "/Users/path/to/sdk"
 
 // TODO: fix the tests
-@Ignore("""
+@Ignore(
+    """
     For some reason these tests do not pass. However, in headless mode all projects open fine.
     To save some time, all tests are implemented as a CLI runner for now.
-""")
+"""
+)
 @RunWith(Parameterized::class)
 class OpenRepositoryTest :
     ParametrizedBaseTest(getResourcesRootPath(::OpenRepositoryTest, "../java_mock_projects")) {
