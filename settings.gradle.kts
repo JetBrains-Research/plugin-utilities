@@ -4,7 +4,8 @@ include(
     "plugin-utilities-plugin",
     "plugin-utilities-core",
     "plugin-utilities-test",
-    "plugin-utilities-python"
+    "plugin-utilities-python",
+    "repo-downloader"
 )
 
 pluginManagement {
