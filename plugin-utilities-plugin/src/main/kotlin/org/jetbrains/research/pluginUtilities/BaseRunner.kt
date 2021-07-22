@@ -1,8 +1,8 @@
 package org.jetbrains.research.pluginUtilities
 
-import org.jetbrains.research.pluginUtilities.util.BaseRunner
-import org.jetbrains.research.pluginUtilities.util.IORunnerArgs
-import org.jetbrains.research.pluginUtilities.util.IORunnerArgsParser
+import org.jetbrains.research.pluginUtilities.runners.BaseRunner
+import org.jetbrains.research.pluginUtilities.runners.IORunnerArgs
+import org.jetbrains.research.pluginUtilities.runners.IORunnerArgsParser
 
 /**
  * A simple CLI runner with two arguments: input and output
