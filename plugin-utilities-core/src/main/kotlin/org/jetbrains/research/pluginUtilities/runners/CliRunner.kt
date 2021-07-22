@@ -1,4 +1,4 @@
-package org.jetbrains.research.pluginUtilities.util
+package org.jetbrains.research.pluginUtilities.runners
 
 import com.intellij.openapi.application.ApplicationStarter
 import com.intellij.openapi.diagnostic.Logger
