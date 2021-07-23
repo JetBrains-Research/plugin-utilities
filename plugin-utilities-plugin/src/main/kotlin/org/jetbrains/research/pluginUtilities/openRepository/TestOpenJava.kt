@@ -6,11 +6,6 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 import com.intellij.openapi.application.ApplicationStarter
 import org.apache.commons.io.FileUtils.cleanDirectory
-import org.jetbrains.research.pluginUtilities.BuildSystem
-import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
-import org.jetbrains.research.pluginUtilities.preprocessing.PreprocessorManager
-import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPreprocessor
-import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import org.jetbrains.research.pluginUtilities.preprocessing.getKotlinJavaPreprocessorManager
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.slf4j.LoggerFactory
