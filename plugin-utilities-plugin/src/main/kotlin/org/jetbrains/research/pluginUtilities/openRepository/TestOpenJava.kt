@@ -7,9 +7,11 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.intellij.openapi.application.ApplicationStarter
 import org.apache.commons.io.FileUtils.cleanDirectory
 import org.jetbrains.research.pluginUtilities.BuildSystem
-import org.jetbrains.research.pluginUtilities.preprocessing.AndroidSdkPreprocessing
-import org.jetbrains.research.pluginUtilities.preprocessing.DeleteDirectoriesPreprocessing
 import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
+import org.jetbrains.research.pluginUtilities.preprocessing.PreprocessorManager
+import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPreprocessor
+import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
+import org.jetbrains.research.pluginUtilities.preprocessing.getKotlinJavaPreprocessorManager
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
@@ -45,22 +47,12 @@ class TestOpenJavaCommand : CliktCommand() {
     }
 
     private fun preprocessRepositories() {
-        val preprocessor = Preprocessor(
-            listOf(
-                AndroidSdkPreprocessing(androidSdk),
-                DeleteDirectoriesPreprocessing(listOf(".idea"))
-            )
-        )
-
-        for (repositoryRoot in input.subdirectories) {
-            val repositoryOutput = preprocessOutput.resolve(repositoryRoot.name)
-            repositoryOutput.mkdir()
-            preprocessor.preprocess(repositoryRoot, repositoryOutput)
-        }
+        val preprocessor = getKotlinJavaPreprocessorManager(androidSdk)
+        preprocessor.preprocessDataset(input, preprocessOutput)
     }
 
     private fun openRepositories() {
-        val repositoryOpener = RepositoryOpener(listOf(BuildSystem.Maven, BuildSystem.Gradle))
+        val repositoryOpener = getKotlinJavaRepositoryOpener()
 
         for (repositoryRoot in preprocessOutput.subdirectories) {
             repositoryOpener.assertRepositoryOpens(repositoryRoot)

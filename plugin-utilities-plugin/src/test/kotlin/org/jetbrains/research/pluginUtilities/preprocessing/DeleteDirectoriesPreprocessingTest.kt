@@ -1,5 +1,6 @@
 package org.jetbrains.research.pluginUtilities.preprocessing
 
+import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
 import org.jetbrains.research.pluginUtilities.util.subdirectories
@@ -17,7 +18,7 @@ class DeleteDirectoriesPreprocessingTest :
     @Parameterized.Parameter(0)
     var inFolder: File? = null
 
-    private val preprocessor = Preprocessor(listOf(DeleteDirectoriesPreprocessing(badDirectories)))
+    private val preprocessor = PreprocessorManager(listOf(DeleteFilesPreprocessor(badDirectories)))
 
     companion object {
         @JvmStatic
@@ -49,7 +50,7 @@ class DeleteDirectoriesPreprocessingTest :
     @Test
     fun `should add local properties with path to sdk`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocess(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
         assertAllBadDirectoriesDeleted(tempOutputDirectory)
     }
 }

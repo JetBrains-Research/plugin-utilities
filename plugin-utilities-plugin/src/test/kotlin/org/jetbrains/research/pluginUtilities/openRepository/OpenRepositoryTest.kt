@@ -1,8 +1,6 @@
 package org.jetbrains.research.pluginUtilities.openRepository
 
 import org.jetbrains.research.pluginUtilities.BuildSystem
-import org.jetbrains.research.pluginUtilities.preprocessing.AndroidSdkPreprocessing
-import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessing
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
 import org.junit.Ignore
@@ -25,7 +23,6 @@ class OpenRepositoryTest :
     ParametrizedBaseTest(getResourcesRootPath(::OpenRepositoryTest, "../java_mock_projects")) {
 
     private val buildSystems = listOf(BuildSystem.Maven, BuildSystem.Gradle)
-    private val preprocessing = listOf<Preprocessing>(AndroidSdkPreprocessing(ANDROID_SDK_PATH))
 
     private val repositoryOpener = RepositoryOpener(buildSystems)
 
