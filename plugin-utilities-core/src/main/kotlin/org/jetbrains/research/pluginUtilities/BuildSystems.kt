@@ -6,6 +6,7 @@ import java.io.File
 enum class BuildSystem(val buildFile: String) {
     Maven("pom.xml"),
     Gradle("build.gradle"),
+    GradleKotlinDsl("build.gradle.kts")
 }
 
 /**
