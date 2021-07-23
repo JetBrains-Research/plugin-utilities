@@ -11,14 +11,14 @@ import java.io.File
 import java.nio.file.Files
 
 @RunWith(Parameterized::class)
-class DeleteDirectoriesPreprocessingTest :
+class DeleteFilesPreprocessorTest :
     ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, "../java_mock_projects")) {
 
     @JvmField
     @Parameterized.Parameter(0)
     var inFolder: File? = null
 
-    private val preprocessor = PreprocessorManager(listOf(DeleteFilesPreprocessor(badDirectories)))
+    private val preprocessor = PreprocessorManager(listOf(DeleteFilesPreprocessor(badFiles)))
 
     companion object {
         @JvmStatic
@@ -30,27 +30,27 @@ class DeleteDirectoriesPreprocessingTest :
             outExtension = null
         )
 
-        val badDirectories = listOf("bad_directory")
+        val badFiles = listOf("bad_directory", "bad_file.txt")
     }
 
     /**
-     * Asserts that there are no directories named [badDirectories] in any part of the [directory] file tree.
+     * Asserts that there are no directories named [badFiles] in any part of the [directory] file tree.
      */
-    private fun assertAllBadDirectoriesDeleted(directory: File) {
-        val badSubdirectory = directory.subdirectories.find { it.name in badDirectories }
-        if (badSubdirectory != null) {
-            throw AssertionError("Directory ${directory.path} has a bad subdirectory ${badSubdirectory.name}")
+    private fun assertAllBadFilesDeleted(directory: File) {
+        val badFile = directory.listFiles()?.find { it.name in badFiles }
+        if (badFile != null) {
+            throw AssertionError("Directory ${directory.path} has a bad file ${badFile.name}")
         } else {
             directory.subdirectories.forEach {
-                assertAllBadDirectoriesDeleted(it)
+                assertAllBadFilesDeleted(it)
             }
         }
     }
 
     @Test
-    fun `should add local properties with path to sdk`() {
+    fun `should delete bad files`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
         preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
-        assertAllBadDirectoriesDeleted(tempOutputDirectory)
+        assertAllBadFilesDeleted(tempOutputDirectory)
     }
 }

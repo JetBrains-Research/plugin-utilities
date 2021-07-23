@@ -1,5 +1,6 @@
 package org.jetbrains.research.pluginUtilities.preprocessing.common
 
+import org.apache.commons.io.FileUtils.deleteDirectory
 import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.slf4j.LoggerFactory
@@ -21,7 +22,11 @@ class DeleteFilesPreprocessor(private val fileNames: List<String>) : Preprocesso
     private fun deleteFiles(directory: File) {
         directory.listFiles()?.filter { it.name in fileNames }?.forEach { file ->
             logger.info("Deleting ${file.path}")
-            file.delete()
+            if (file.isDirectory) {
+                deleteDirectory(file)
+            } else {
+                file.delete()
+            }
         }
         directory.subdirectories.forEach { subdirectory -> deleteFiles(subdirectory) }
     }
