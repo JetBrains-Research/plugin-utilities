@@ -14,7 +14,6 @@ import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
 
-
 object TestOpenJavaStarter : ApplicationStarter {
     override fun getCommandName(): String = "testOpenJava"
 
@@ -46,10 +45,12 @@ class TestOpenJavaCommand : CliktCommand() {
     }
 
     private fun preprocessRepositories() {
-        val preprocessor = Preprocessor(listOf(
-            AndroidSdkPreprocessing(androidSdk),
-            DeleteDirectoriesPreprocessing(listOf(".idea"))
-        ))
+        val preprocessor = Preprocessor(
+            listOf(
+                AndroidSdkPreprocessing(androidSdk),
+                DeleteDirectoriesPreprocessing(listOf(".idea"))
+            )
+        )
 
         for (repositoryRoot in input.subdirectories) {
             val repositoryOutput = preprocessOutput.resolve(repositoryRoot.name)

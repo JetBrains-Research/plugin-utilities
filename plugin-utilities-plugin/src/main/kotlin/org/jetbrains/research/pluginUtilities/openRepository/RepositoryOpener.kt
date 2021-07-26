@@ -11,10 +11,8 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.util.GradleConstants
 import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
-import org.jetbrains.research.pluginUtilities.preprocessing.Preprocessor
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.nio.file.Files
 
 /**
  * Locates projects in repositories and opens them.
