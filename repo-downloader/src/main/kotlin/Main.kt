@@ -11,7 +11,7 @@ class DownloadRepositoriesCommand : CliktCommand(name = "downloadRepos") {
         mustBeReadable = true,
         canBeDir = false
     )
-    private val outputDirectory by argument("output").file(canBeFile = false, mustBeWritable = true)
+    private val outputDirectory by argument("output").file(canBeFile = false)
     private val yaml = Yaml()
 
     override fun run() {
