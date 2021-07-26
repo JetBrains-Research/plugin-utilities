@@ -32,16 +32,16 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-    
+
       # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: 11
-    
+
       - uses: actions/checkout@v2
       - run: ./gradlew build
-      
+
       - name: Upload Test Report
         uses: actions/upload-artifact@v2
         if: ${{ always() }}
@@ -89,12 +89,14 @@ jobs:
       - uses: actions/checkout@v2
       # Download & install the Android SDK.
       - uses: malinskiy/action-android/install-sdk@release/0.1.2
-      # Set up platform tools like adb.
-      - run: sdkmanager "platform-tools" "platforms;android-28"
-      # Open mock Java projects
-      - run: ./gradlew androidCli -Prunner="testOpenJava" -Pinput="$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects" -PpreprocessOutput="~/preprocessed_projects" -PandroidSdk="$ANDROID_HOME"
+      - name: Install Android SDK tools
+        run: sdkmanager "platform-tools" "platforms;android-28"
+      - name: Open Mock Projects
+        run: ./gradlew androidCli -Prunner="testOpenJava" -Pinput="$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects" -PpreprocessOutput="~/preprocessed_projects" -PandroidSdk="$ANDROID_HOME"
       # Upload IDEA logs
       - uses: actions/upload-artifact@v2
+        name: Upload IDEA Logs
+        if: always()
         with:
           name: Idea Logs
           path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
