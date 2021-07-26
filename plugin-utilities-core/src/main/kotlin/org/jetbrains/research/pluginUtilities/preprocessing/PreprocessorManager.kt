@@ -1,22 +1,25 @@
 package org.jetbrains.research.pluginUtilities.preprocessing
 
 import org.jetbrains.research.pluginUtilities.util.subdirectories
+import org.slf4j.LoggerFactory
 import java.io.File
-import java.util.logging.Logger
 
 /**
  * Runs multiple preprocessors on one repository or dataset.
  * @param preprocessors The preprocessors that should be run
  */
 class PreprocessorManager(private val preprocessors: List<Preprocessor>) {
-    private val logger = Logger.getLogger(javaClass.name)
+    private val logger = LoggerFactory.getLogger(javaClass.name)
 
     /**
      * Preprocesses repository in [repoDirectory] by copying it to [outputDirectory].
      * Does not mutate the original repository
      */
     fun preprocessRepository(repoDirectory: File, outputDirectory: File) {
-        repoDirectory.copyRecursively(outputDirectory)
+        repoDirectory.copyRecursively(outputDirectory, true) { file, exception ->
+            logger.error("Exception when copying file ${file.path}", exception)
+            OnErrorAction.SKIP
+        }
         preprocessors.forEach { preprocessing ->
             logger.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
             preprocessing.preprocess(outputDirectory)
