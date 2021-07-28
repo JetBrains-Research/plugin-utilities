@@ -34,7 +34,7 @@ class DeleteFilesPreprocessorTest :
     }
 
     /**
-     * Asserts that there are no directories named [badFiles] in any part of the [directory] file tree.
+     * Asserts that there are no files named [badFiles] in any part of the [directory] file tree.
      */
     private fun assertAllBadFilesDeleted(directory: File) {
         val badFile = directory.listFiles()?.find { it.name in badFiles }
