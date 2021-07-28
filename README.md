@@ -45,3 +45,38 @@ dependencies {
    }
 }
 ```
+
+## Running tasks directly
+
+### Preprocessing
+
+Before opening repositories they should be preprocessed. Preprocessing
+* removes all `.idea` folders
+* adds `local.properties` files with `sdk.dir=<path to Android Sdk>` where it detects a Gradle build system (Gradle Kotlin DSL included).
+
+Preprocessing **DOES NOT** mutate the original dataset but copies it to the output folder.
+
+Suppose you have a dataset with 3 repositories
+
+```
+path/to/dataset/
+  repo1/
+  repo2/
+  repo3/
+```
+
+You can run preprocessing with 
+```shell
+./gradlew preprocessKotlinJava -Pinput="path/to/dataset" -Poutput="path/to/output" -PandroidSdk="path/to/androidSdk"
+```
+
+which will store preprocessed repositories in the output folder:
+
+
+```
+path/to/output/
+  repo1/
+  repo2/
+  repo3/
+```
+
