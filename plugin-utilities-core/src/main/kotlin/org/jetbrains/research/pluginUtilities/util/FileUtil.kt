@@ -9,6 +9,7 @@ enum class Extension(val value: String) {
     KTS("kts"),
     PY("py"),
     TXT("txt"),
+    CSV("csv"),
     EMPTY("")
 }
 
