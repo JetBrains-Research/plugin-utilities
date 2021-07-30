@@ -1,4 +1,4 @@
-name: build
+name: test on projects
 
 on: [push]
 
@@ -50,8 +50,7 @@ jobs:
           path: |
             build/reports/tests/**/*
 
-
-  test:
+  open-java-mocks:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -61,18 +60,20 @@ jobs:
         with:
           java-version: 11
       - uses: actions/checkout@v2
-      - name: Run tests
-        run: ./gradlew test
-
-
-  code-style:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
+      # Download & install the Android SDK.
+      - uses: malinskiy/action-android/install-sdk@release/0.1.2
+      - name: Install Android SDK tools
+        run: sdkmanager "platform-tools" "platforms;android-28"
+      - name: Open Mock Projects
+        run: |
+          ./gradlew androidCli -Prunner="testOpenJava" \
+            -Pinput="$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects" \
+            -PpreprocessOutput="$GITHUB_WORKSPACE/plugin-utilities-plugin/build/preprocessed-projects" \
+            -PandroidSdk="$ANDROID_HOME"
+      # Upload IDEA logs
+      - uses: actions/upload-artifact@v2
+        name: Upload IDEA Logs
+        if: always()
         with:
-          java-version: 11
-      - uses: actions/checkout@v2
-      - run: ./gradlew ktlintCheck
+          name: Idea Logs
+          path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
