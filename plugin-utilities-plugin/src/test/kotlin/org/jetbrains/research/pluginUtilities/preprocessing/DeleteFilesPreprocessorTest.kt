@@ -3,14 +3,13 @@ package org.jetbrains.research.pluginUtilities.preprocessing
 import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
+import org.jetbrains.research.pluginUtilities.util.noInputError
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.io.File
 import java.nio.file.Files
-
-private const val RESOURCES_PATH = "../mock_data/java_mock_projects"
 
 @RunWith(Parameterized::class)
 class DeleteFilesPreprocessorTest :
@@ -52,7 +51,10 @@ class DeleteFilesPreprocessorTest :
     @Test
     fun `should delete bad files`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(
+            inFolder ?: noInputError("DeleteFilesPreprocessorTest"),
+            tempOutputDirectory
+        )
         assertAllBadFilesDeleted(tempOutputDirectory)
     }
 }

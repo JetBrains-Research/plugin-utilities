@@ -4,6 +4,7 @@ import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
+import org.jetbrains.research.pluginUtilities.util.noInputError
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -11,8 +12,7 @@ import java.io.File
 import java.nio.file.Files
 import java.util.Properties
 
-private const val ANDROID_SDK_PATH = "path/to/my/android/sdk"
-private const val RESOURCES_PATH = "../mock_data/java_mock_projects"
+private const val ANDROID_SDK_PATH = "someValue"
 
 @RunWith(Parameterized::class)
 class AndroidSdkPreprocessingTest :
@@ -56,7 +56,10 @@ class AndroidSdkPreprocessingTest :
     @Test
     fun `should add local properties with path to sdk`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(
+            inFolder ?: noInputError("AndroidSdkPreprocessingTest"),
+            tempOutputDirectory
+        )
         assertLocalProperties(tempOutputDirectory)
     }
 }
