@@ -20,9 +20,18 @@ class PreprocessorManager(private val preprocessors: List<Preprocessor>) {
             logger.error("Exception when copying file ${file.path}", exception)
             OnErrorAction.SKIP
         }
+        preprocessRepositoryInplace(outputDirectory)
+    }
+
+    /**
+     * Preprocesses repository [repoDirectory] inplace.
+     * Mutates the original repository located at [repoDirectory].
+     */
+    fun preprocessRepositoryInplace(repoDirectory: File) {
+        logger.info("Preprocessing repository ${repoDirectory.name} at ${repoDirectory.path}")
         preprocessors.forEach { preprocessing ->
-            logger.info("Running preprosessing ${preprocessing.name} for ${repoDirectory.name}")
-            preprocessing.preprocess(outputDirectory)
+            logger.info("Running preprosessing '${preprocessing.name}' for ${repoDirectory.name}")
+            preprocessing.preprocess(repoDirectory)
         }
     }
 
@@ -33,11 +42,22 @@ class PreprocessorManager(private val preprocessors: List<Preprocessor>) {
      * For each repository it creates a separate output subdirectory.
      */
     fun preprocessDataset(datasetDirectory: File, outputDirectory: File) {
-        for (repositoryRoot in datasetDirectory.subdirectories) {
-            val repositoryOutput = outputDirectory.resolve(repositoryRoot.name)
+        for (repoDirectory in datasetDirectory.subdirectories) {
+            val repositoryOutput = outputDirectory.resolve(repoDirectory.name)
             repositoryOutput.mkdir()
-            logger.info("Preprocessing repository ${repositoryRoot.name}")
-            preprocessRepository(repositoryRoot, repositoryOutput)
+            logger.info("Preprocessing repository ${repoDirectory.name}")
+            preprocessRepository(repoDirectory, repositoryOutput)
+        }
+    }
+
+    /**
+     * Preprocesses all repositories in the dataset inplace.
+     * Mutates the dataset.
+     * @param datasetDirectory A directory where each subdirectory is an individual repository
+     */
+    fun preprocessDatasetInplace(datasetDirectory: File) {
+        for (repoDirectory in datasetDirectory.subdirectories) {
+            preprocessRepositoryInplace(repoDirectory)
         }
     }
 }
