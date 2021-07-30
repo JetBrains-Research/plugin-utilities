@@ -43,8 +43,10 @@ class PreprocessorManager(private val preprocessors: List<Preprocessor>) {
      * For each repository it creates a separate output subdirectory.
      */
     fun preprocessDataset(datasetDirectory: File, outputDirectory: File) {
-        logger.info("Preprocessing dataset at ${datasetDirectory.absolutePath} " +
-                "by copying to ${outputDirectory.absolutePath}")
+        logger.info(
+            "Preprocessing dataset at ${datasetDirectory.absolutePath} " +
+                "by copying to ${outputDirectory.absolutePath}"
+        )
         for (repoDirectory in datasetDirectory.subdirectories) {
             val repositoryOutput = outputDirectory.resolve(repoDirectory.name)
             repositoryOutput.mkdir()
