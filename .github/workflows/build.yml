@@ -1,6 +1,6 @@
 name: build
 
-on: [push]
+on: [ push ]
 
 jobs:
   setup:
@@ -32,16 +32,19 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-    
+
       # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: 11
-    
+
       - uses: actions/checkout@v2
       - run: ./gradlew build
-      
+
+      - name: Download mock projects
+        run: git submodule init && git submodule update
+
       - name: Upload Test Report
         uses: actions/upload-artifact@v2
         if: ${{ always() }}
@@ -60,7 +63,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
       - uses: actions/checkout@v2
+
+      - name: Download mock projects
+        run: git submodule init && git submodule update
+
       - name: Run tests
         run: ./gradlew test
 
