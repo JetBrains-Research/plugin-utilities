@@ -10,9 +10,11 @@ import org.junit.runners.Parameterized
 import java.io.File
 import java.nio.file.Files
 
+private const val RESOURCES_PATH = "../mock_data/java_mock_projects"
+
 @RunWith(Parameterized::class)
 class DeleteFilesPreprocessorTest :
-    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, "../java_mock_projects")) {
+    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, RESOURCES_PATH)) {
 
     @JvmField
     @Parameterized.Parameter(0)
@@ -25,7 +27,7 @@ class DeleteFilesPreprocessorTest :
         @Parameterized.Parameters(name = "{index}: {0}")
         fun getTestData() = getInAndOutArray(
             ::AndroidSdkPreprocessingTest,
-            resourcesRootName = "../java_mock_projects",
+            resourcesRootName = RESOURCES_PATH,
             inExtension = Extension.EMPTY,
             outExtension = null
         )
