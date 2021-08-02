@@ -40,10 +40,11 @@ jobs:
           java-version: 11
 
       - uses: actions/checkout@v2
-      - run: ./gradlew build
 
       - name: Download mock projects
         run: git submodule init && git submodule update
+
+      - run: ./gradlew build
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v2
