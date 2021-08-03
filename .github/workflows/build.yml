@@ -40,9 +40,8 @@ jobs:
           java-version: 11
 
       - uses: actions/checkout@v2
-
-      - name: Download mock projects
-        run: git submodule init && git submodule update
+        with:
+          submodules: true
 
       - run: ./gradlew build
 
@@ -66,9 +65,8 @@ jobs:
           java-version: 11
 
       - uses: actions/checkout@v2
-
-      - name: Download mock projects
-        run: git submodule init && git submodule update
+        with:
+          submodules: true
 
       - name: Run tests
         run: ./gradlew test
