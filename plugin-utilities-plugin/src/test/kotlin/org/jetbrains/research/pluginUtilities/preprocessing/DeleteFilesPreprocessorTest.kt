@@ -10,8 +10,6 @@ import org.junit.runners.Parameterized
 import java.io.File
 import java.nio.file.Files
 
-private const val RESOURCES_PATH = "../mock_data/java_mock_projects"
-
 @RunWith(Parameterized::class)
 class DeleteFilesPreprocessorTest :
     ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, RESOURCES_PATH)) {
@@ -52,7 +50,7 @@ class DeleteFilesPreprocessorTest :
     @Test
     fun `should delete bad files`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(inFolder ?: noInputError(), tempOutputDirectory)
         assertAllBadFilesDeleted(tempOutputDirectory)
     }
 }

@@ -9,12 +9,12 @@ const val IDEA_FOLDER_NAME = ".idea"
  * Creates a PreprocessorManager for Kotlin and Java projects.
  * Combines [AndroidSdkPreprocessor] and [DeleteFilesPreprocessor],
  * adding `local.properties` files and deleting `.idea` folders.
- * @param androidSdkAbsolutePath Absolute path to Android SDK.
+ * @param androidSdkHome Absolute path to Android SDK home.
  * If it is null then [AndroidSdkPreprocessor] will not be used
  */
-fun getKotlinJavaPreprocessorManager(androidSdkAbsolutePath: String?) = PreprocessorManager(
+fun getKotlinJavaPreprocessorManager(androidSdkHome: String?) = PreprocessorManager(
     listOfNotNull(
-        androidSdkAbsolutePath?.let { AndroidSdkPreprocessor(it) },
+        androidSdkHome?.let { AndroidSdkPreprocessor(it) },
         DeleteFilesPreprocessor(listOf(IDEA_FOLDER_NAME))
     )
 )

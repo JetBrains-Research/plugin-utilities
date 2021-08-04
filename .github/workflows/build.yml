@@ -54,23 +54,6 @@ jobs:
             build/reports/tests/**/*
 
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: Run tests
-        run: ./gradlew test
-
 
   code-style:
     needs: build

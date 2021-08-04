@@ -11,8 +11,7 @@ import java.io.File
 import java.nio.file.Files
 import java.util.Properties
 
-private const val ANDROID_SDK_PATH = "path/to/my/android/sdk"
-private const val RESOURCES_PATH = "../mock_data/java_mock_projects"
+private const val ANDROID_SDK_PATH = "someValue"
 
 @RunWith(Parameterized::class)
 class AndroidSdkPreprocessingTest :
@@ -56,7 +55,7 @@ class AndroidSdkPreprocessingTest :
     @Test
     fun `should add local properties with path to sdk`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(inFolder ?: noInputError(), tempOutputDirectory)
         assertLocalProperties(tempOutputDirectory)
     }
 }
