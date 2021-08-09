@@ -4,6 +4,7 @@ import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
+import org.jetbrains.research.pluginUtilities.util.noInputError
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

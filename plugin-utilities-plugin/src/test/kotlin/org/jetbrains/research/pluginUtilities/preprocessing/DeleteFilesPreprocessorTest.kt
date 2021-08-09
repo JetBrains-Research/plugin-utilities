@@ -3,6 +3,7 @@ package org.jetbrains.research.pluginUtilities.preprocessing
 import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
+import org.jetbrains.research.pluginUtilities.util.noInputError
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.junit.Test
 import org.junit.runner.RunWith
