@@ -56,7 +56,10 @@ class AndroidSdkPreprocessingTest :
     @Test
     fun `should add local properties with path to sdk`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder ?: noInputError(), tempOutputDirectory)
+        preprocessor.preprocessRepository(
+            inFolder ?: noInputError("AndroidSdkPreprocessingTest"),
+            tempOutputDirectory
+        )
         assertLocalProperties(tempOutputDirectory)
     }
 }

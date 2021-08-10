@@ -51,7 +51,10 @@ class DeleteFilesPreprocessorTest :
     @Test
     fun `should delete bad files`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder ?: noInputError(), tempOutputDirectory)
+        preprocessor.preprocessRepository(
+            inFolder ?: noInputError("DeleteFilesPreprocessorTest"),
+            tempOutputDirectory
+        )
         assertAllBadFilesDeleted(tempOutputDirectory)
     }
 }
