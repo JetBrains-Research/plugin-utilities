@@ -4,6 +4,7 @@ import com.intellij.ide.impl.ProjectUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.importing.ImportSpecBuilder
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
+import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ex.ProjectManagerEx
 import com.intellij.serviceContainer.AlreadyDisposedException
@@ -55,29 +56,37 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
         return allProjectsOpenedSuccessfully
     }
 
-    // TODO: refactor this mess
     private fun openSingleProject(projectRoot: File): Project {
         logger.info("Opening project ${projectRoot.name}")
         var resultProject: Project? = null
 
-        ApplicationManager.getApplication().invokeAndWait {
-            val project = ProjectUtil.openOrImport(projectRoot.toPath())
+        try {
+            ApplicationManager.getApplication().invokeAndWait {
+                val project = ProjectUtil.openOrImport(projectRoot.toPath())
 
-            if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
-                logger.info("IDEA detected Maven build system")
-                MavenProjectsManager.getInstance(project).scheduleImportAndResolve()
-                MavenProjectsManager.getInstance(project).importProjects()
-            } else {
-                logger.info("IDEA detected Gradle build system")
-                ExternalSystemUtil.refreshProject(
-                    projectRoot.path,
-                    ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
-                )
+                if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
+                    logger.info("IDEA detected Maven build system")
+                    MavenProjectsManager.getInstance(project).scheduleImportAndResolve()
+                    MavenProjectsManager.getInstance(project).importProjects()
+                } else {
+                    logger.info("IDEA detected Gradle build system")
+                    ExternalSystemUtil.refreshProject(
+                        projectRoot.path,
+                        ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
+                    )
+                }
+                resultProject = project
             }
-            resultProject = project
+        } catch (e: ProcessCanceledException) {
+            throw ProjectOpeningException("Process was canceled", e)
         }
 
-        return resultProject?.also { logger.info("Project ${it.name} opened") } ?: error("Project was null for some unknown reason")
+        return resultProject?.also {
+            logger.info("Project ${it.name} opened")
+        } ?: throw ProjectOpeningException(
+            "Project was null for an unknown reason. " +
+                "`openOrImport` may have returned null"
+        )
     }
 
     /**
@@ -90,4 +99,8 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
             // TODO: figure out why this happened
             logger.error("Failed to close project", e)
         }
+}
+
+class ProjectOpeningException(message: String, cause: Exception?) : Exception(message, cause) {
+    constructor(msg: String) : this(msg, null)
 }
