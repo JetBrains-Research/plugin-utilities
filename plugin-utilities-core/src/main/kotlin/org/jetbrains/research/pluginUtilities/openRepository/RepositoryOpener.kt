@@ -29,8 +29,12 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
      */
     fun openRepository(repoDirectory: File, action: (Project) -> Unit): Boolean {
         logger.info("Opening repository $repoDirectory")
-        val projectRoots = repoDirectory.collectBuildSystemRoots(acceptedBuildSystems)
-        logger.info("Found project roots $projectRoots")
+        val buildSystemRoots = repoDirectory.collectBuildSystemRoots(acceptedBuildSystems)
+        val projectRoots = buildSystemRoots.ifEmpty {
+            logger.info("No folders with build systems found! Opening the root of the repository")
+            listOf(repoDirectory)
+        }
+        logger.info("Opening project roots: $projectRoots")
 
         var allProjectsOpenedSuccessfully = true
 
@@ -42,8 +46,11 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
                 allProjectsOpenedSuccessfully = false
                 continue
             }
-            action(project)
-            closeSingleProject(project)
+            try {
+                action(project)
+            } finally {
+                closeSingleProject(project)
+            }
         }
         return allProjectsOpenedSuccessfully
     }
@@ -57,11 +64,11 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
             val project = ProjectUtil.openOrImport(projectRoot.toPath())
 
             if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
-                logger.info("It is a Maven project")
+                logger.info("IDEA detected Maven build system")
                 MavenProjectsManager.getInstance(project).scheduleImportAndResolve()
                 MavenProjectsManager.getInstance(project).importProjects()
             } else {
-                logger.info("It is a Gradle project")
+                logger.info("IDEA detected Gradle build system")
                 ExternalSystemUtil.refreshProject(
                     projectRoot.path,
                     ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)

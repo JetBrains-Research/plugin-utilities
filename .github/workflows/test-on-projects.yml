@@ -1,12 +1,17 @@
 name: test on projects
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -40,6 +45,8 @@ jobs:
           java-version: 11
 
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - run: ./gradlew build
 
       - name: Upload Test Report
@@ -59,7 +66,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
       - uses: actions/checkout@v2
+        with:
+          submodules: true
+
       # Download & install the Android SDK.
       - uses: malinskiy/action-android/install-sdk@release/0.1.2
       - name: Install Android SDK tools
