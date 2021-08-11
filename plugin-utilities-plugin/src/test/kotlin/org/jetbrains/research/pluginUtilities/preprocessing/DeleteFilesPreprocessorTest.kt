@@ -3,6 +3,7 @@ package org.jetbrains.research.pluginUtilities.preprocessing
 import org.jetbrains.research.pluginUtilities.preprocessing.common.DeleteFilesPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
+import org.jetbrains.research.pluginUtilities.util.noInputError
 import org.jetbrains.research.pluginUtilities.util.subdirectories
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,7 +13,7 @@ import java.nio.file.Files
 
 @RunWith(Parameterized::class)
 class DeleteFilesPreprocessorTest :
-    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, "../java_mock_projects")) {
+    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, RESOURCES_PATH)) {
 
     @JvmField
     @Parameterized.Parameter(0)
@@ -25,7 +26,7 @@ class DeleteFilesPreprocessorTest :
         @Parameterized.Parameters(name = "{index}: {0}")
         fun getTestData() = getInAndOutArray(
             ::AndroidSdkPreprocessingTest,
-            resourcesRootName = "../java_mock_projects",
+            resourcesRootName = RESOURCES_PATH,
             inExtension = Extension.EMPTY,
             outExtension = null
         )
@@ -34,7 +35,7 @@ class DeleteFilesPreprocessorTest :
     }
 
     /**
-     * Asserts that there are no directories named [badFiles] in any part of the [directory] file tree.
+     * Asserts that there are no files named [badFiles] in any part of the [directory] file tree.
      */
     private fun assertAllBadFilesDeleted(directory: File) {
         val badFile = directory.listFiles()?.find { it.name in badFiles }
@@ -50,7 +51,10 @@ class DeleteFilesPreprocessorTest :
     @Test
     fun `should delete bad files`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(
+            inFolder ?: noInputError("DeleteFilesPreprocessorTest"),
+            tempOutputDirectory
+        )
         assertAllBadFilesDeleted(tempOutputDirectory)
     }
 }

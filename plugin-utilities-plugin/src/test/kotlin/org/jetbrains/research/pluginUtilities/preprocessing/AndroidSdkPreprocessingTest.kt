@@ -4,6 +4,7 @@ import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.jetbrains.research.pluginUtilities.preprocessing.android.AndroidSdkPreprocessor
 import org.jetbrains.research.pluginUtilities.util.Extension
 import org.jetbrains.research.pluginUtilities.util.ParametrizedBaseTest
+import org.jetbrains.research.pluginUtilities.util.noInputError
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -11,11 +12,11 @@ import java.io.File
 import java.nio.file.Files
 import java.util.Properties
 
-private const val ANDROID_SDK_PATH = "path/to/my/android/sdk"
+private const val ANDROID_SDK_PATH = "someValue"
 
 @RunWith(Parameterized::class)
 class AndroidSdkPreprocessingTest :
-    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, "../java_mock_projects")) {
+    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, RESOURCES_PATH)) {
 
     val preprocessor = PreprocessorManager(listOf(AndroidSdkPreprocessor(ANDROID_SDK_PATH)))
 
@@ -28,7 +29,7 @@ class AndroidSdkPreprocessingTest :
         @Parameterized.Parameters(name = "{index}: {0}")
         fun getTestData() = getInAndOutArray(
             ::AndroidSdkPreprocessingTest,
-            resourcesRootName = "../java_mock_projects",
+            resourcesRootName = RESOURCES_PATH,
             inExtension = Extension.EMPTY,
             outExtension = null
         )
@@ -55,7 +56,10 @@ class AndroidSdkPreprocessingTest :
     @Test
     fun `should add local properties with path to sdk`() {
         val tempOutputDirectory = Files.createTempDirectory("preprocessed").toFile()
-        preprocessor.preprocessRepository(inFolder!!, tempOutputDirectory)
+        preprocessor.preprocessRepository(
+            inFolder ?: noInputError("AndroidSdkPreprocessingTest"),
+            tempOutputDirectory
+        )
         assertLocalProperties(tempOutputDirectory)
     }
 }
