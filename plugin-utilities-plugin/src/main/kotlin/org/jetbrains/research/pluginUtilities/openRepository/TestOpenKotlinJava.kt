@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
 
 object TestOpenJavaStarter : ApplicationStarter {
-    override fun getCommandName(): String = "testOpenJava"
+    override fun getCommandName(): String = "testOpenKotlinJava"
 
     override fun main(args: MutableList<String>) {
         TestOpenJavaCommand().main(args.drop(1))

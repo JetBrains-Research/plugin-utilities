@@ -63,11 +63,7 @@ open class PreprocessKotlinJavaCliTask : org.jetbrains.intellij.tasks.RunIdeTask
     }
 }
 
-open class IOCliAndroidTask : org.jetbrains.intellij.tasks.RunIdeTask() {
-    // Name of the runner
-    @get:Input
-    val runner: String? by project
-
+open class TestOpenKotlinJavaTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Input directory with files
     @get:Input
     val input: String? by project
@@ -111,10 +107,10 @@ tasks {
         )
     }
 
-    register<IOCliAndroidTask>("androidCli") {
+    register<TestOpenKotlinJavaTask>("testOpenKotlinJava") {
         dependsOn("buildPlugin")
         args = listOfNotNull(
-            runner,
+            "testOpenKotlinJava",
             input?.let { "--input=$it" },
             preprocessOutput?.let { "--preprocessOutput=$it" },
             androidSdk?.let { "--androidSdk=$it" }

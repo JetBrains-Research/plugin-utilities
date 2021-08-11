@@ -5,7 +5,7 @@ on:
     branches:
       - main
   workflow_dispatch: {}
-    
+
 
 jobs:
   setup:
@@ -79,7 +79,7 @@ jobs:
         run: sdkmanager "platform-tools" "platforms;android-28"
       - name: Open Mock Projects
         run: |
-          ./gradlew androidCli -Prunner="testOpenJava" \
+          ./gradlew testOpenKotlinJava \
             -Pinput="$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects" \
             -PpreprocessOutput="$GITHUB_WORKSPACE/plugin-utilities-plugin/build/preprocessed-projects" \
             -PandroidSdk="$ANDROID_HOME"
