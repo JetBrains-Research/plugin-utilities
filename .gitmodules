@@ -1,3 +1,0 @@
-[submodule "mock_data"]
-	path = plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/mock_data
-	url = https://github.com/JetBrains-Research/plugin-utilies-mock-data

@@ -40,8 +40,8 @@ jobs:
           java-version: 11
 
       - uses: actions/checkout@v2
-        with:
-          submodules: true
+      - name: Download submodules
+        run: ./submodules.sh
 
       - run: ./gradlew build
 
