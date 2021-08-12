@@ -86,5 +86,4 @@ To run tests you need to clone the repository with all the mock data.
 
 1. Make sure your current working directory is the root of this project
 2. Run `bash ./submodules.sh`
-
-
+3. Then you can build the project with `./gradlew build`
