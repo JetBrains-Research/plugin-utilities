@@ -1,3 +1,4 @@
 .idea
 build
 .gradle
+plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/mock_data
