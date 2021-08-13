@@ -80,10 +80,15 @@ path/to/output/
   repo3/
 ```
 
-## Building from source
+## Running tests locally
 
-To run tests you need to clone the repository with all the mock data.
+### In Docker
 
-1. Make sure your current working directory is the root of this project
-2. Run `bash ./submodules.sh`
-3. Then you can build the project with `./gradlew build`
+1. Build docker image `sudo docker build --tag plugin-utilities .`
+2. Run the tests `sudo docker run -v $(pwd):/repo plugin-utilities`
+
+### Without Docker
+
+1. Clone this [repository](https://github.com/JetBrains-Research/plugin-utilies-mock-data) somewhere. We will call that folder `<mockdata>`. 
+2. Set the environment variable `JAVA_MOCK_PROJECTS=<mockdata>/java_mock_projects`.
+3. Now you can build _plugin-utilities_ by running `./gradlew build`. 
