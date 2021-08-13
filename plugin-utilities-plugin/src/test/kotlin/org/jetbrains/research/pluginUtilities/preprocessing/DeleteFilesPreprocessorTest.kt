@@ -12,8 +12,7 @@ import java.io.File
 import java.nio.file.Files
 
 @RunWith(Parameterized::class)
-class DeleteFilesPreprocessorTest :
-    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, RESOURCES_PATH)) {
+class DeleteFilesPreprocessorTest : ParametrizedBaseTest(JAVA_MOCK_PROJECTS_PATH) {
 
     @JvmField
     @Parameterized.Parameter(0)
@@ -25,8 +24,7 @@ class DeleteFilesPreprocessorTest :
         @JvmStatic
         @Parameterized.Parameters(name = "{index}: {0}")
         fun getTestData() = getInAndOutArray(
-            ::AndroidSdkPreprocessingTest,
-            resourcesRootName = RESOURCES_PATH,
+            JAVA_MOCK_PROJECTS_PATH,
             inExtension = Extension.EMPTY,
             outExtension = null
         )

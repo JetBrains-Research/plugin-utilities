@@ -8,8 +8,10 @@ RUN apt-get update && apt-get install -y openjdk-11-jdk
 # Install Git
 RUN apt -y install git-all
 
+# Download all mock projects
+RUN git clone https://github.com/JetBrains-Research/plugin-utilies-mock-data /mock-data
+# Save the path to mock projects
+RUN export JAVA_MOCK_PROJECTS=/mock-data/java_mock_projects
+
 WORKDIR repo
 
-# Download all mock projects
-COPY submodules.sh submodules.sh
-RUN bash ./submodules.sh

@@ -30,9 +30,16 @@ open class ParametrizedBaseTest(private val testDataRoot: String) : BasePlatform
             resourcesRootName: String = resourcesRoot,
             inExtension: Extension = Extension.KT,
             outExtension: Extension? = Extension.KT
+        ): List<Array<File>> =
+            getInAndOutArray(getResourcesRootPath(cls, resourcesRootName), inExtension, outExtension)
+
+        fun getInAndOutArray(
+            path: String,
+            inExtension: Extension = Extension.KT,
+            outExtension: Extension? = Extension.KT
         ): List<Array<File>> {
             val inAndOutFilesMap = FileTestUtil.getInAndOutDataMap(
-                getResourcesRootPath(cls, resourcesRootName),
+                path,
                 inFormat = TestDataFormat("in", inExtension, Type.Input),
                 outFormat = outExtension?.let { TestDataFormat("out", outExtension, Type.Output) }
             )

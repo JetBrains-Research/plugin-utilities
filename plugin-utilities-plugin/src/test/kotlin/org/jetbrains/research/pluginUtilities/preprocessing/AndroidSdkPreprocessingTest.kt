@@ -15,8 +15,7 @@ import java.util.Properties
 private const val ANDROID_SDK_PATH = "someValue"
 
 @RunWith(Parameterized::class)
-class AndroidSdkPreprocessingTest :
-    ParametrizedBaseTest(getResourcesRootPath(::AndroidSdkPreprocessingTest, RESOURCES_PATH)) {
+class AndroidSdkPreprocessingTest : ParametrizedBaseTest(JAVA_MOCK_PROJECTS_PATH) {
 
     val preprocessor = PreprocessorManager(listOf(AndroidSdkPreprocessor(ANDROID_SDK_PATH)))
 
@@ -28,8 +27,7 @@ class AndroidSdkPreprocessingTest :
         @JvmStatic
         @Parameterized.Parameters(name = "{index}: {0}")
         fun getTestData() = getInAndOutArray(
-            ::AndroidSdkPreprocessingTest,
-            resourcesRootName = RESOURCES_PATH,
+            JAVA_MOCK_PROJECTS_PATH,
             inExtension = Extension.EMPTY,
             outExtension = null
         )
