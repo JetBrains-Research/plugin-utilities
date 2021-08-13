@@ -14,4 +14,3 @@ RUN git clone https://github.com/JetBrains-Research/plugin-utilies-mock-data /mo
 RUN export JAVA_MOCK_PROJECTS=/mock-data/java_mock_projects
 
 WORKDIR repo
-
