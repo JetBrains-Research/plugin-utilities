@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: tree
+      - run: find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/| - \1/"
       - run: echo $GITHUB_WORKSPACE
       - run: ./gradlew build
 
