@@ -80,7 +80,7 @@ jobs:
       - name: Open Mock Projects
         run: |
           ./gradlew testOpenKotlinJava \
-            -Pinput="$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/org/jetbrains/research/pluginUtilities/java_mock_projects" \
+            -Pinput="$JAVA_MOCK_PROJECTS" \
             -PpreprocessOutput="$GITHUB_WORKSPACE/plugin-utilities-plugin/build/preprocessed-projects" \
             -PandroidSdk="$ANDROID_HOME"
       # Upload IDEA logs
