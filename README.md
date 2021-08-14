@@ -84,8 +84,10 @@ path/to/output/
 
 ### In Docker
 
-1. Build docker image `sudo docker build --tag plugin-utilities .`
-2. Run the tests `sudo docker run -v $(pwd):/repo plugin-utilities`
+1. There are 2 ways to get our Docker image:
+   1. Download it from DockerHub `sudo docker pull furetur/plugin-utilities`
+   2. Or build it locally `sudo docker build --tag furetur/plugin-utilities .`
+3. Run the tests `sudo docker run -v $(pwd):/repo furetur/plugin-utilities`
 
 ### Without Docker
 

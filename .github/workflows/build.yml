@@ -41,14 +41,3 @@ jobs:
           name: test-report
           path: |
             **/build/reports/tests/**/*
-
-
-
-  code-style:
-    needs: build
-    runs-on: ubuntu-latest
-    container: furetur/plugin-utilities
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: ./gradlew ktlintCheck
