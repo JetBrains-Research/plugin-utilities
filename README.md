@@ -80,3 +80,17 @@ path/to/output/
   repo3/
 ```
 
+## Running tests locally
+
+### In Docker
+
+1. There are 2 ways to get our Docker image:
+   1. Download it from DockerHub `sudo docker pull furetur/plugin-utilities`
+   2. Or build it locally `sudo docker build --tag furetur/plugin-utilities .`
+3. Run the tests `sudo docker run -v $(pwd):/repo furetur/plugin-utilities`
+
+### Without Docker
+
+1. Clone this [repository](https://github.com/JetBrains-Research/plugin-utilies-mock-data) somewhere. We will call that folder `<mockdata>`. 
+2. Set the environment variable `JAVA_MOCK_PROJECTS=<mockdata>/java_mock_projects`.
+3. Now you can build _plugin-utilities_ by running `./gradlew build`. 
