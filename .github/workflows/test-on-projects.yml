@@ -4,16 +4,16 @@ on:
   push:
     branches:
       - main
+      - open_repo
   workflow_dispatch: {}
 
 
 jobs:
   setup:
     runs-on: ubuntu-latest
+    container: furetur/plugin-utilities
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -35,33 +35,10 @@ jobs:
 
 
 
-  build:
+  open-java-mocks:
     needs: setup
     runs-on: ubuntu-latest
-    steps:
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - run: ./gradlew build
-
-      - name: Upload Test Report
-        uses: actions/upload-artifact@v2
-        if: ${{ always() }}
-        with:
-          name: test-report
-          path: |
-            build/reports/tests/**/*
-
-  open-java-mocks:
-    needs: build
-    runs-on: ubuntu-latest
+    container: furetur/plugin-utilities
     steps:
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -70,8 +47,6 @@ jobs:
           java-version: 11
 
       - uses: actions/checkout@v2
-        with:
-          submodules: true
 
       # Download & install the Android SDK.
       - uses: malinskiy/action-android/install-sdk@release/0.1.2
