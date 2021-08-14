@@ -1,18 +1,14 @@
 name: build
 
-on: [push]
+on: [ push ]
 
 jobs:
   setup:
     runs-on: ubuntu-latest
+    container: furetur/plugin-utilities
+
     steps:
       - uses: actions/checkout@v2
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
 
       # Cache Gradle dependencies
       # Cache Gradle Wrapper
@@ -31,15 +27,11 @@ jobs:
   build:
     needs: setup
     runs-on: ubuntu-latest
+    container: furetur/plugin-utilities
+
     steps:
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
       - uses: actions/checkout@v2
+
       - run: ./gradlew build
 
       - name: Upload Test Report
@@ -48,34 +40,7 @@ jobs:
         with:
           name: test-report
           path: |
-            build/reports/tests/**/*
-
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - uses: actions/checkout@v2
-      - name: Run tests
-        run: ./gradlew test
-
-
-  code-style:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - uses: actions/checkout@v2
-      - run: ./gradlew ktlintCheck
+            **/build/reports/tests/**/*
 
   open-java-github-projects:
     needs: build

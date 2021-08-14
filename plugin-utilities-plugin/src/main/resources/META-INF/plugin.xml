@@ -13,6 +13,7 @@
         <!--Add starters here-->
         <appStarter implementation="org.jetbrains.research.pluginUtilities.CliRunnerExample"/>
         <appStarter implementation="org.jetbrains.research.pluginUtilities.openRepository.TestOpenJavaStarter"/>
+        <appStarter implementation="org.jetbrains.research.pluginUtilities.preprocessing.PreprocessKotlinJavaStarter"/>
     </extensions>
 
 </idea-plugin>
