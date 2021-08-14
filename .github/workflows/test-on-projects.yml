@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - open_repo
+      # todo: remove this
+      - github-testing
   workflow_dispatch: {}
 
 
