@@ -1,0 +1,1 @@
+Use empty resources' directory for default value of `JAVA_MOCK_PROJECTS_PATH` const.
