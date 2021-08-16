@@ -25,6 +25,8 @@ RUN unzip /cmdtools.zip && rm /cmdtools.zip
 RUN mkdir -p ${ANDROID_HOME}/cmdline-tools/latest
 RUN mv cmdline-tools/* ${ANDROID_HOME}/cmdline-tools/latest
 ENV PATH "${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin"
+## Accept all licences
+RUN yes | sdkmanager --licenses
 ## Then install Android SDK components
 RUN sdkmanager "platform-tools" "platforms;android-28"
 
