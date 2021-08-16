@@ -85,3 +85,5 @@ object FileTestUtil {
 fun getPsiFile(file: File, fixture: CodeInsightTestFixture): PsiFile {
     return fixture.configureByFile(file.path)
 }
+
+fun noInputError(testName: String): Nothing = error("Parametrized test '$testName' did not receive input")
