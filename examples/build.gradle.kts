@@ -28,18 +28,19 @@ allprojects {
     }
 
     val utilitiesProjectName = "org.jetbrains.research.pluginUtilities"
+    val utilitiesBranch = System.getenv("PLUGIN_UTILITIES_BRANCH") ?: properties("pluginUtilitiesBranch")
     dependencies {
         implementation(kotlin("stdlib-jdk8"))
 
         // Plugin utilities modules
         implementation("$utilitiesProjectName:plugin-utilities-core") {
             version {
-                branch = "add-python-sdk-util"
+                branch = utilitiesBranch
             }
         }
         implementation("$utilitiesProjectName:plugin-utilities-python") {
             version {
-                branch = "add-python-sdk-util"
+                branch = utilitiesBranch
             }
         }
     }
