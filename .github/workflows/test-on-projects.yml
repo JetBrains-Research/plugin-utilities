@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - open_repo
+  pull_request: {}
   workflow_dispatch: {}
 
 
