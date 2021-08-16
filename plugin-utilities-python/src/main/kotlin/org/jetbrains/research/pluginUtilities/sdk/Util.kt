@@ -42,6 +42,7 @@ private fun createVirtualEnvSdk(project: Project, baseSdk: Sdk, venvRoot: String
     return sdk ?: error("Internal error: SDK for ${project.name} project was not created")
 }
 
+@Throws(IllegalStateException::class)
 fun setSdkToProject(project: Project, venvRoot: String) {
     val baseSdk = createBaseSdk(project)
     val sdk = createVirtualEnvSdk(project, baseSdk, venvRoot)
