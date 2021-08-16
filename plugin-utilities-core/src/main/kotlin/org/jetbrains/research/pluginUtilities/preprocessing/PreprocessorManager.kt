@@ -16,6 +16,7 @@ class PreprocessorManager(private val preprocessors: List<Preprocessor>) {
      * Does not mutate the original repository
      */
     fun preprocessRepository(repoDirectory: File, outputDirectory: File) {
+        logger.info("Copying repository from ${repoDirectory.absolutePath} to ${outputDirectory.absolutePath}")
         repoDirectory.copyRecursively(outputDirectory, true) { file, exception ->
             logger.error("Exception when copying file ${file.path}", exception)
             OnErrorAction.SKIP
@@ -42,6 +43,10 @@ class PreprocessorManager(private val preprocessors: List<Preprocessor>) {
      * For each repository it creates a separate output subdirectory.
      */
     fun preprocessDataset(datasetDirectory: File, outputDirectory: File) {
+        logger.info(
+            "Preprocessing dataset at ${datasetDirectory.absolutePath} " +
+                "by copying to ${outputDirectory.absolutePath}"
+        )
         for (repoDirectory in datasetDirectory.subdirectories) {
             val repositoryOutput = outputDirectory.resolve(repoDirectory.name)
             repositoryOutput.mkdir()
