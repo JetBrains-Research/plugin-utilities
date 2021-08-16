@@ -9,9 +9,9 @@ RUN apt-get update && apt-get install -y openjdk-11-jdk
 RUN apt -y install git-all curl unzip
 
 # Download all mock projects
-RUN git clone https://github.com/JetBrains-Research/plugin-utilies-mock-data /mock-data
+RUN git clone https://github.com/JetBrains-Research/plugin-utilies-mock-data.git /mock-data
 # Save the path to mock projects
-ENV JAVA_MOCK_PROJECTS=/mock-data/java_mock_projects
+ENV JAVA_MOCK_PROJECTS /mock-data/java_mock_projects
 
 # Download and install Android SDK
 ## Set the paths
