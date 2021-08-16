@@ -50,5 +50,5 @@ jobs:
         
       - name: Check if the examples project work with the current version as a Gradle dependency
         run: |
-            export PLUGIN_UTILITIES_BRANCH=${{ steps.extract_branch.outputs.branch }}
-            ./examples/gradlew build
+          export PLUGIN_UTILITIES_BRANCH=${{ steps.extract_branch.outputs.branch }}
+          ./examples/gradlew build
