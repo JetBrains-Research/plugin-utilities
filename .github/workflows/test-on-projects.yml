@@ -77,7 +77,6 @@ jobs:
   open-java-github-projects-simple:
     needs: setup
     runs-on: ubuntu-latest
-    container: furetur/plugin-utilities:github-testing
     steps:
       - uses: actions/checkout@v2
 
