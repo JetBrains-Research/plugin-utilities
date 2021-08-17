@@ -36,12 +36,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Open Mock Projects
+      - name: Preprocess Mock Projects
         run: |
-          ./gradlew testOpenKotlinJava \
-            -Pinput="$JAVA_MOCK_PROJECTS" \
-            -PpreprocessOutput="$GITHUB_WORKSPACE/plugin-utilities-plugin/build/preprocessed-projects" \
-            -PandroidSdk="$ANDROID_HOME"
+          ./gradlew preprocessKotlinJava \
+            -Pinput=$JAVA_MOCK_PROJECTS \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
+
+      - name: Open Mock Projects
+        run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
+
       # Upload IDEA logs
       - uses: actions/upload-artifact@v2
         name: Upload IDEA Logs
@@ -59,12 +63,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Open Java Projects
+      - name: Preprocess Java Projects
         run: |
-          ./gradlew testOpenKotlinJava \
-            -Pinput="$JAVA_GITHUB_PROJECTS" \
-            -PpreprocessOutput="/preprocessed_projects" \
-            -PandroidSdk="$ANDROID_HOME"
+          ./gradlew preprocessKotlinJava \
+            -Pinput=$JAVA_GITHUB_PROJECTS \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
+
+      - name: Open Java Projects
+        run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
 
       # Upload IDEA logs
       - uses: actions/upload-artifact@v2
@@ -74,20 +81,34 @@ jobs:
           name: Idea Logs
           path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
 
-  open-java-github-projects-simple:
+
+  open-java-github-projects-with-download:
     needs: setup
     runs-on: ubuntu-latest
+    container: furetur/plugin-utilities:github-testing
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download Java Projects from Github
-        run: ./gradlew downloadRepos -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml -Poutput=$GITHUB_WORKSPACE/build/javaGithubRepos
+      - name: Download Github Projects
+        run: |
+          ./gradlew downloadRepos \
+            -Prepos=/repo/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
+            -Poutput=$JAVA_GITHUB_PROJECTS
+
+      - name: Preprocess Java Projects
+        run: |
+          ./gradlew preprocessKotlinJava \
+            -Pinput=$JAVA_GITHUB_PROJECTS \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
+
       - name: Open Java Projects
-        run: ./gradlew testOpenKotlinJava -Pinput=$GITHUB_WORKSPACE/build/javaGithubRepos -PpreprocessOutput=~/preprocessed_projects -PandroidSdk=$ANDROID_HOME
+        run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
+
       # Upload IDEA logs
       - uses: actions/upload-artifact@v2
         name: Upload IDEA Logs
         if: always()
         with:
-          name: Idea Logs Simple
+          name: Idea Logs
           path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
