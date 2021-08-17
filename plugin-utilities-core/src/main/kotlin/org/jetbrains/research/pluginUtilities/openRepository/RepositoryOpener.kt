@@ -92,13 +92,14 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
     /**
      * Function to close project. The close should be forced to avoid physical changes to data.
      */
-    private fun closeSingleProject(project: Project) =
+    private fun closeSingleProject(project: Project) = ApplicationManager.getApplication().invokeAndWait {
         try {
             ProjectManagerEx.getInstanceEx().forceCloseProject(project)
         } catch (e: AlreadyDisposedException) {
             // TODO: figure out why this happened
             logger.error("Failed to close project", e)
         }
+    }
 }
 
 class ProjectOpeningException(message: String, cause: Exception?) : Exception(message, cause) {
