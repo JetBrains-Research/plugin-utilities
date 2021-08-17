@@ -50,6 +50,8 @@ class TestOpenJavaCommand : CliktCommand() {
         val repositoryOpener = getKotlinJavaRepositoryOpener()
 
         for (repositoryRoot in preprocessOutput.subdirectories) {
+            // log straight to stdout for convenience
+            println("Opening repository ${repositoryRoot.name}")
             repositoryOpener.assertRepositoryOpens(repositoryRoot)
         }
     }

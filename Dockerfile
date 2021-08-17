@@ -11,11 +11,13 @@ ENV JAVA_GITHUB_PROJECTS  /github-data/java
 
 # Install OpenJDK11
 RUN apt-get update && apt-get install -y openjdk-11-jdk
+# Install Git
+RUN apt -y install git-all
 
 FROM base as builder
 
-# Install Git and Curl and Unzip
-RUN apt -y install git-all curl unzip
+# Install Curl and Unzip
+RUN apt -y install curl unzip
 
 # Download all mock projects
 RUN git clone https://github.com/JetBrains-Research/plugin-utilies-mock-data $MOCK_DATA

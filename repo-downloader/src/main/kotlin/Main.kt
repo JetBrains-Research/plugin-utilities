@@ -22,6 +22,13 @@ class DownloadRepositoriesCommand : CliktCommand(name = "downloadRepos") {
         config.githubRepositories.forEach { githubRepository ->
             githubRepository.clone(outputDirectory)
         }
+        println(
+            """
+                ========================
+                Cloned ${config.githubRepositories.size} repos: ${config.githubRepositories.map { it.fullName }}
+                ========================
+            """.trimIndent()
+        )
     }
 }
 
