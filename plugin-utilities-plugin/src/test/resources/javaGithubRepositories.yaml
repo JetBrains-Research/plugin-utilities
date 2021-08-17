@@ -11,8 +11,6 @@ githubRepositories:
   - url: 'https://github.com/cryptomator/cryptomator'
     commit: 'd7c70ed8411016ce567a88491c2429dca8783a09'
 
-  - url: 'https://github.com/jenkinsci/configuration-as-code-plugin'
-    commit: '4b13c1067885a2f2c9c0da00bb9a16c13f47afc8'
   ## These do not open on main branch even though the builds are green on CI
   ## However release commits open
   - url: 'https://github.com/spring-cloud/spring-cloud-config'
