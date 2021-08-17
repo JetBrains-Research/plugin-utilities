@@ -92,7 +92,7 @@ jobs:
       - name: Download Github Projects
         run: |
           ./gradlew downloadRepos \
-            -Prepos=/repo/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
+            -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
             -Poutput=$JAVA_GITHUB_PROJECTS
 
       - name: Preprocess Java Projects
