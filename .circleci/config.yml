@@ -32,3 +32,6 @@ jobs:
       - run:
           name: Open Projects
           command: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
+      - store_artifacts:
+          path: '**/idea.log'
+
