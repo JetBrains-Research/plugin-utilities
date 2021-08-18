@@ -16,6 +16,12 @@ jobs:
           name: Disable Gradle Daemon
           command: mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
       - run:
+          name: Download Projects
+          command: |
+            ./gradlew downloadRepos \
+            -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
+            -Poutput=$JAVA_GITHUB_PROJECTS
+      - run:
           name: Preprocess Projects
           command: |
             ./gradlew preprocessKotlinJava \
