@@ -5,7 +5,7 @@ executors:
       - image: furetur/plugin-utilities:github-testing
 
 jobs:
-  preprocess-and-open-github-projects:
+  build:
     executor: github-testing
     steps:
       - checkout
