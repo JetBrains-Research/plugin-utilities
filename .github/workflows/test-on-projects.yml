@@ -105,12 +105,12 @@ jobs:
         run: |
           ./gradlew preprocessKotlinJava \
             -Pinput=$GITHUB_WORKSPACE/build/ghrepos \
-            -Poutput=/preprocessed \
+            -Poutput=$GITHUB_WORKSPACE/build/preprocessed \
             -PandroidSdk=$ANDROID_HOME
 
       - name: Open Java Projects
         timeout-minutes: 15
-        run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
+        run: ./gradlew testOpenKotlinJava -Pinput=$GITHUB_WORKSPACE/build/preprocessed
 
       - uses: actions/upload-artifact@v2
         name: Upload IDEA Logs
