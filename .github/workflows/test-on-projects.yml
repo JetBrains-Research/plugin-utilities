@@ -63,6 +63,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Disable Gradle Daemon
+        run: mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+
       - name: Preprocess Java Projects
         run: |
           ./gradlew preprocessKotlinJava \

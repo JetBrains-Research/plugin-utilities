@@ -10,14 +10,18 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Check ANDROID_HOME folder
+          command: cd $ANDROID_HOME && ls
+      - run:
+          name: Disable Gradle Daemon
+          command: mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+      - run:
           name: Preprocess Projects
           command: |
             ./gradlew preprocessKotlinJava \
             -Pinput=$JAVA_GITHUB_PROJECTS \
             -Poutput=/preprocessed \
             -PandroidSdk=$ANDROID_HOME
-      - run: echo $ANDROID_HOME
-      - run: cd $ANDROID_HOME && ls
       - run:
           name: Open Projects
           command: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
