@@ -85,14 +85,17 @@ jobs:
           path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
 
 
-  open-java-github-projects-with-download:
+  open-java-github-projects-simple:
     needs: setup
     runs-on: ubuntu-latest
-    container: furetur/plugin-utilities:github-testing
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download Github Projects
+      - uses: malinskiy/action-android/install-sdk@release/0.1.2
+      - name: Install Android SDK tools
+        run: sdkmanager "platform-tools" "platforms;android-28"
+
+      - name: Download Java Projects from Github
         run: |
           ./gradlew downloadRepos \
             -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
@@ -101,17 +104,18 @@ jobs:
       - name: Preprocess Java Projects
         run: |
           ./gradlew preprocessKotlinJava \
-            -Pinput=$JAVA_GITHUB_PROJECTS \
-            -Poutput=/preprocessed \
-            -PandroidSdk=$ANDROID_HOME
+          -Pinput=$JAVA_GITHUB_PROJECTS \
+          -Poutput=/preprocessed \
+          -PandroidSdk=$ANDROID_HOME
 
       - name: Open Java Projects
+        timeout-minutes: 15
         run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
 
-      # Upload IDEA logs
       - uses: actions/upload-artifact@v2
         name: Upload IDEA Logs
         if: always()
         with:
-          name: Idea Logs
+          name: Idea Logs Simple
           path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
+
