@@ -60,11 +60,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     container: furetur/plugin-utilities:github-testing
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
       - uses: actions/checkout@v2
-
-      - name: Disable Gradle Daemon
-        run: mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
 
       - name: Preprocess Java Projects
         run: |
