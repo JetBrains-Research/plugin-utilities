@@ -99,12 +99,12 @@ jobs:
         run: |
           ./gradlew downloadRepos \
             -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
-            -Poutput=/repos
+            -Poutput=$GITHUB_WORKSPACE/build/ghRepos
 
       - name: Preprocess Java Projects
         run: |
           ./gradlew preprocessKotlinJava \
-          -Pinput=/repos \
+          -Pinput=$GITHUB_WORKSPACE/build/ghRepos \
           -Poutput=/preprocessed \
           -PandroidSdk=$ANDROID_HOME
 
