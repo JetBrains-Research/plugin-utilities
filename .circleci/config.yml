@@ -33,5 +33,5 @@ jobs:
           name: Open Projects
           command: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
       - store_artifacts:
-          path: '**/idea.log'
+          path: /repo/plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
 
