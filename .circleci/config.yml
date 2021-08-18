@@ -16,6 +16,8 @@ jobs:
             -Pinput=$JAVA_GITHUB_PROJECTS \
             -Poutput=/preprocessed \
             -PandroidSdk=$ANDROID_HOME
+      - run: echo $ANDROID_HOME
+      - run: cd $ANDROID_HOME && ls
       - run:
           name: Open Projects
           command: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
