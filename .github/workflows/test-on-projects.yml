@@ -73,6 +73,7 @@ jobs:
             -PandroidSdk=$ANDROID_HOME
 
       - name: Open Java Projects
+        timeout-minutes: 15
         run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
 
       # Upload IDEA logs
