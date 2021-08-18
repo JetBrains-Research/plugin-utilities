@@ -1,0 +1,21 @@
+version: 2.1
+executors:
+  github-testing:
+    docker:
+      - image: furetur/plugin-utilities:github-testing
+
+jobs:
+  preprocess-and-open-github-projects:
+    executor: github-testing
+    steps:
+      - checkout
+      - run:
+          name: Preprocess Projects
+          command: |
+            ./gradlew preprocessKotlinJava \
+            -Pinput=$JAVA_GITHUB_PROJECTS \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
+      - run:
+          name: Open Projects
+          command: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
