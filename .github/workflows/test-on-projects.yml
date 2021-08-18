@@ -99,14 +99,14 @@ jobs:
         run: |
           ./gradlew downloadRepos \
             -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
-            -Poutput=$GITHUB_WORKSPACE/build/ghRepos
+            -Poutput=/ghRepos
 
       - name: Preprocess Java Projects
         run: |
           ./gradlew preprocessKotlinJava \
-          -Pinput=$GITHUB_WORKSPACE/build/ghRepos \
-          -Poutput=/preprocessed \
-          -PandroidSdk=$ANDROID_HOME
+            -Pinput=/ghRepos \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
 
       - name: Open Java Projects
         timeout-minutes: 15
