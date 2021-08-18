@@ -1,35 +1,25 @@
 package org.jetbrains.research.pluginUtilities.examples
 
-import com.intellij.ide.impl.OpenProjectTask
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.project.ex.ProjectManagerEx
+import org.jetbrains.research.pluginUtilities.openRepository.getKotlinJavaRepositoryOpener
+import org.jetbrains.research.pluginUtilities.preprocessing.getKotlinJavaPreprocessorManager
 import org.jetbrains.research.pluginUtilities.runners.BaseRunner
 import org.jetbrains.research.pluginUtilities.runners.IORunnerArgs
 import org.jetbrains.research.pluginUtilities.runners.IORunnerArgsParser
 
-class JvmProjectOpenerStarter:
+class JvmProjectOpenerStarter :
     BaseRunner<IORunnerArgs, IORunnerArgsParser>("jvm-project-opener-runner-example", IORunnerArgsParser) {
 
-    // TODO: use preprocessing and implemented functions
+    private val preprocessor = getKotlinJavaPreprocessorManager(null)
+    private val repositoryOpener = getKotlinJavaRepositoryOpener()
+
     override fun run(args: IORunnerArgs) {
-        getSubdirectories(args.inputDir).forEach{ projectPath ->
-            ApplicationManager.getApplication().invokeAndWait {
-                ProjectManagerEx.getInstanceEx().openProject(
-                    projectPath,
-                    OpenProjectTask(isNewProject = true, runConfigurators = true, forceOpenInNewFrame = true)
-                )?.let { project ->
-                    try {
-                        println("The project ${project.basePath} was opened!")
-                    } catch (ex: Exception) {
-                        println(ex)
-                    } finally {
-                        ApplicationManager.getApplication().invokeAndWait {
-                            val closeStatus = ProjectManagerEx.getInstanceEx().forceCloseProject(project)
-                            println("Project ${project.name} is closed = $closeStatus")
-                        }
-                    }
-                }
+        val datasetDir = args.inputDir ?: error("input directory must not be null")
+        preprocessor.preprocessDatasetInplace(datasetDir.toFile())
+        getSubdirectories(datasetDir).forEach { repositoryRoot ->
+            val allProjectsOpenedSuccessfully = repositoryOpener.openRepository(repositoryRoot.toFile()) { project ->
+                println("Project $project opened")
             }
+            println("All projects opened successfully: $allProjectsOpenedSuccessfully")
         }
     }
 }
