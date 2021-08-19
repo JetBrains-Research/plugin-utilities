@@ -13,6 +13,6 @@ githubRepositories:
 
   ## These do not open on main branch even though the builds are green on CI
   ## However release commits open
-  - url: 'https://github.com/spring-cloud/spring-cloud-config'
-    commit: '3db70200282dfe8ecd4f6ed6754408f01bea8d43'
+#  - url: 'https://github.com/spring-cloud/spring-cloud-config'
+#    commit: '3db70200282dfe8ecd4f6ed6754408f01bea8d43'
 
