@@ -1,9 +1,9 @@
 githubRepositories:
   # Android Gradle projects
-  - url: 'https://github.com/CymChad/BaseRecyclerViewAdapterHelper'
-    commit: '046c2be8c4ae5b5d39177e86d4ffc27bd803ae64'
-  - url: 'https://github.com/journeyapps/zxing-android-embedded'
-    commit: '40260272fcff4f14181803495e7d370c23e35db7'
+#  - url: 'https://github.com/CymChad/BaseRecyclerViewAdapterHelper'
+#    commit: '046c2be8c4ae5b5d39177e86d4ffc27bd803ae64'
+#  - url: 'https://github.com/journeyapps/zxing-android-embedded'
+#    commit: '40260272fcff4f14181803495e7d370c23e35db7'
   - url: 'https://github.com/jenkinsci/configuration-as-code-plugin'
     commit: '4b13c1067885a2f2c9c0da00bb9a16c13f47afc8'
 
