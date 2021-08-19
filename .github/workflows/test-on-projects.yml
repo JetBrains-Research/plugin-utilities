@@ -89,6 +89,11 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4
+        with:
+          maven-version: 3.5.4
+
       - uses: actions/checkout@v2
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.2
