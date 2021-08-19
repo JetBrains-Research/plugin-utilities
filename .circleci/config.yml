@@ -14,9 +14,6 @@ jobs:
           name: Check ANDROID_HOME folder
           command: cd $ANDROID_HOME && ls
       - run:
-          name: Disable Gradle Daemon
-          command: mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
-      - run:
           name: Download Projects
           command: |
             ./gradlew downloadRepos \
