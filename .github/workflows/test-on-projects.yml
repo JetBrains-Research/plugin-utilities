@@ -60,8 +60,6 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     container: furetur/plugin-utilities:github-testing
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
       - uses: actions/checkout@v2
 
@@ -83,44 +81,3 @@ jobs:
         with:
           name: Idea Logs
           path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
-
-
-  open-java-github-projects-simple:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v4
-        with:
-          maven-version: 3.5.4
-
-      - uses: actions/checkout@v2
-
-      - uses: malinskiy/action-android/install-sdk@release/0.1.2
-      - name: Install Android SDK tools
-        run: sdkmanager "platform-tools" "platforms;android-28"
-
-      - name: Download Java Projects from Github
-        run: |
-          ./gradlew downloadRepos \
-            -Prepos=$GITHUB_WORKSPACE/plugin-utilities-plugin/src/test/resources/javaGithubRepositories.yaml \
-            -Poutput=$GITHUB_WORKSPACE/build/ghrepos
-
-      - name: Preprocess Java Projects
-        run: |
-          ./gradlew preprocessKotlinJava \
-            -Pinput=$GITHUB_WORKSPACE/build/ghrepos \
-            -Poutput=$GITHUB_WORKSPACE/build/preprocessed \
-            -PandroidSdk=$ANDROID_HOME
-
-      - name: Open Java Projects
-        timeout-minutes: 15
-        run: ./gradlew testOpenKotlinJava -Pinput=$GITHUB_WORKSPACE/build/preprocessed
-
-      - uses: actions/upload-artifact@v2
-        name: Upload IDEA Logs
-        if: always()
-        with:
-          name: Idea Logs Simple
-          path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
-

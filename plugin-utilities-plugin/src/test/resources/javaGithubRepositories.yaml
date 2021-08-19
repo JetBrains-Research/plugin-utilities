@@ -1,26 +1,19 @@
 githubRepositories:
   # Android Gradle projects
-#  - url: 'https://github.com/CymChad/BaseRecyclerViewAdapterHelper'
-#    commit: '046c2be8c4ae5b5d39177e86d4ffc27bd803ae64'
-#  - url: 'https://github.com/journeyapps/zxing-android-embedded'
-#    commit: '40260272fcff4f14181803495e7d370c23e35db7'
-  ## Requires CMake and NDK
-#  - url: 'https://github.com/koral--/android-gif-drawable'
-#    commit: '3300df03233a53353553643b168e0c5e88f33eae'
-
+  - url: 'https://github.com/CymChad/BaseRecyclerViewAdapterHelper'
+    commit: '046c2be8c4ae5b5d39177e86d4ffc27bd803ae64'
+  - url: 'https://github.com/journeyapps/zxing-android-embedded'
+    commit: '40260272fcff4f14181803495e7d370c23e35db7'
 
   # Maven
-  # TODO: maven projects do not open in CI. IDEA hangs
-
-  - url: 'https://github.com/jenkinsci/configuration-as-code-plugin'
-    commit: '29537fc26f123b49bd2f759bec3d29efc39b7f78'
+  # TODO: maven projects do not open in CI. IDEA hangs. Here are examples of such projects
+#  - url: 'https://github.com/jenkinsci/configuration-as-code-plugin'
+#    commit: '29537fc26f123b49bd2f759bec3d29efc39b7f78'
 
   ## IDEA mistakes it for Gradle. Solved by removing the `.idea` folder
 #  - url: 'https://github.com/cryptomator/cryptomator'
 #    commit: 'd7c70ed8411016ce567a88491c2429dca8783a09'
 
-  ## These do not open on main branch even though the builds are green on CI
-  ## However release commits open
 #  - url: 'https://github.com/spring-cloud/spring-cloud-config'
 #    commit: '3db70200282dfe8ecd4f6ed6754408f01bea8d43'
 
