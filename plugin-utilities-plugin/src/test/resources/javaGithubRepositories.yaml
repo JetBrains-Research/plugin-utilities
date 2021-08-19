@@ -8,8 +8,8 @@ githubRepositories:
   # Maven
 
   ## IDEA mistakes it for Gradle. Solved by removing the `.idea` folder
-#  - url: 'https://github.com/cryptomator/cryptomator'
-#    commit: 'd7c70ed8411016ce567a88491c2429dca8783a09'
+  - url: 'https://github.com/cryptomator/cryptomator'
+    commit: 'd7c70ed8411016ce567a88491c2429dca8783a09'
 
   ## These do not open on main branch even though the builds are green on CI
   ## However release commits open
