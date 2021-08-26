@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - github-testing
+  pull_request: {}
   workflow_dispatch: {}
 
 
