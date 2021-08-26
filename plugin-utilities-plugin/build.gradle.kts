@@ -105,7 +105,7 @@ tasks {
         dependsOn("buildPlugin")
         args = listOfNotNull(
             "testOpenKotlinJava",
-            input?.let { "--input=$it" },
+            input?.let { "--input=$it" }
         )
     }
 }
