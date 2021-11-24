@@ -17,7 +17,7 @@ interface RunnerArgsParser<A : RunnerArgs> {
 }
 
 /** Arguments data class for input and output directory names arguments. */
-data class IORunnerArgs(val parser: ArgParser) : RunnerArgs {
+open class IORunnerArgs(val parser: ArgParser) : RunnerArgs {
     val inputDir by parser.storing(
         "-i",
         "--input",
