@@ -10,6 +10,6 @@ include(
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        jcenter()
+        mavenCentral()
     }
 }
