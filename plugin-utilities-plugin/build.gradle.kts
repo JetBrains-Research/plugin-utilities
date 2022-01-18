@@ -68,12 +68,6 @@ open class TestOpenKotlinJavaTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     @get:Input
     val input: String? by project
 
-    @get:Input
-    val preprocessOutput: String? by project
-
-    @get:Input
-    val androidSdk: String? by project
-
     init {
         jvmArgs = listOf(
             "-Djava.awt.headless=true",
@@ -111,9 +105,7 @@ tasks {
         dependsOn("buildPlugin")
         args = listOfNotNull(
             "testOpenKotlinJava",
-            input?.let { "--input=$it" },
-            preprocessOutput?.let { "--preprocessOutput=$it" },
-            androidSdk?.let { "--androidSdk=$it" }
+            input?.let { "--input=$it" }
         )
     }
 }

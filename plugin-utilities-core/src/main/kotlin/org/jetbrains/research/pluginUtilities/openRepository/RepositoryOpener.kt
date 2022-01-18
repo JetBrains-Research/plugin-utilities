@@ -7,7 +7,6 @@ import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ex.ProjectManagerEx
-import com.intellij.serviceContainer.AlreadyDisposedException
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.util.GradleConstants
 import org.jetbrains.research.pluginUtilities.BuildSystem
@@ -92,13 +91,14 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
     /**
      * Function to close project. The close should be forced to avoid physical changes to data.
      */
-    private fun closeSingleProject(project: Project) =
+    private fun closeSingleProject(project: Project) = ApplicationManager.getApplication().invokeAndWait {
         try {
             ProjectManagerEx.getInstanceEx().forceCloseProject(project)
-        } catch (e: AlreadyDisposedException) {
+        } catch (e: Exception) {
             // TODO: figure out why this happened
             logger.error("Failed to close project", e)
         }
+    }
 }
 
 class ProjectOpeningException(message: String, cause: Exception?) : Exception(message, cause) {

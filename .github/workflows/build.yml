@@ -42,12 +42,12 @@ jobs:
           name: test-report
           path: |
             **/build/reports/tests/**/*
-            
+
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-        
+
       - name: Check if the examples project works correctly with the current version as a Gradle dependency
         run: |
           export PLUGIN_UTILITIES_BRANCH=${{ steps.extract_branch.outputs.branch }}

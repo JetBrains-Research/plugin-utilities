@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - github-testing
   pull_request: {}
   workflow_dispatch: {}
 
@@ -11,15 +12,9 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    container: furetur/plugin-utilities
+    container: furetur/plugin-utilities:github-testing
     steps:
       - uses: actions/checkout@v2
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
 
       # Cache Gradle dependencies
       # Cache Gradle Wrapper
@@ -38,22 +33,48 @@ jobs:
   open-java-mocks:
     needs: setup
     runs-on: ubuntu-latest
-    container: furetur/plugin-utilities
+    container: furetur/plugin-utilities:github-testing
     steps:
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
       - uses: actions/checkout@v2
 
-      - name: Open Mock Projects
+      - name: Preprocess Mock Projects
         run: |
-          ./gradlew testOpenKotlinJava \
-            -Pinput="$JAVA_MOCK_PROJECTS" \
-            -PpreprocessOutput="$GITHUB_WORKSPACE/plugin-utilities-plugin/build/preprocessed-projects" \
-            -PandroidSdk="$ANDROID_HOME"
+          ./gradlew preprocessKotlinJava \
+            -Pinput=$JAVA_MOCK_PROJECTS \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
+
+      - name: Open Mock Projects
+        run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
+
+      # Upload IDEA logs
+      - uses: actions/upload-artifact@v2
+        name: Upload IDEA Logs
+        if: always()
+        with:
+          name: Idea Logs
+          path: plugin-utilities-plugin/build/idea-sandbox/system/log/idea.log
+
+
+
+  open-java-github-projects:
+    needs: setup
+    runs-on: ubuntu-latest
+    container: furetur/plugin-utilities:github-testing
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Preprocess Java Projects
+        run: |
+          ./gradlew preprocessKotlinJava \
+            -Pinput=$JAVA_GITHUB_PROJECTS \
+            -Poutput=/preprocessed \
+            -PandroidSdk=$ANDROID_HOME
+
+      - name: Open Java Projects
+        timeout-minutes: 15
+        run: ./gradlew testOpenKotlinJava -Pinput=/preprocessed
+
       # Upload IDEA logs
       - uses: actions/upload-artifact@v2
         name: Upload IDEA Logs
