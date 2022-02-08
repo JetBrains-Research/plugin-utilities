@@ -7,6 +7,8 @@ import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ex.ProjectManagerEx
+import com.intellij.openapi.projectRoots.*
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.serviceContainer.AlreadyDisposedException
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.util.GradleConstants
@@ -63,6 +65,20 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
         try {
             ApplicationManager.getApplication().invokeAndWait {
                 val project = ProjectUtil.openOrImport(projectRoot.toPath())
+
+                ProjectRootManager.getInstance(project).projectSdk ?: run {
+                    val jdks = ProjectJdkTable.getInstance().allJdks
+                    val sdk = if (jdks.isNotEmpty()) {
+                        jdks.first()
+                    } else {
+                        val javaSdkType = JavaSdk.getInstance()
+                        // TODO: get programmatically
+                        val javaHome = "/usr/bin/java"
+                        javaSdkType.createJdk(javaSdkType.suggestSdkName("JShell JDK", javaHome), javaHome, false)
+                    }
+                    ProjectJdkTable.getInstance().addJdk(sdk)
+                    ProjectRootManager.getInstance(project).projectSdk = sdk
+                }
 
                 if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
                     logger.info("IDEA detected Maven build system")
