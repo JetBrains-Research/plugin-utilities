@@ -15,7 +15,7 @@ import org.junit.Ignore
  */
 @Ignore
 open class ParametrizedBaseWithPythonSdkTest(testDataRoot: String) : ParametrizedBaseTest(testDataRoot) {
-    private lateinit var sdk: Sdk
+    protected lateinit var sdk: Sdk
 
     override fun setUp() {
         super.setUp()
