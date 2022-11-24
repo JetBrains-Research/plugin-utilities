@@ -1,6 +1,6 @@
 package org.jetbrains.research.pluginUtilities.openRepository
 
-import com.intellij.ide.impl.ProjectUtil
+import com.intellij.ide.impl.OpenProjectTask
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.importing.ImportSpecBuilder
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
@@ -14,6 +14,7 @@ import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.nio.file.Path
 
 /**
  * Locates projects in repositories and opens them.
@@ -62,7 +63,12 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
 
         try {
             ApplicationManager.getApplication().invokeAndWait {
-                val project = ProjectUtil.openOrImport(projectRoot.toPath())
+                val project = ProjectManagerEx.getInstanceEx().openProject(
+                    Path.of(projectRoot.path),
+                    OpenProjectTask(isNewProject = true, runConfigurators = true, forceOpenInNewFrame = true)
+                ) ?: throw ProjectOpeningException(
+                    "`openProject` returned null"
+                )
 
                 if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
                     logger.info("IDEA detected Maven build system")
@@ -84,8 +90,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
         return resultProject?.also {
             logger.info("Project ${it.name} opened")
         } ?: throw ProjectOpeningException(
-            "Project was null for an unknown reason. " +
-                "`openOrImport` may have returned null"
+            "Project was null for an unknown reason."
         )
     }
 
