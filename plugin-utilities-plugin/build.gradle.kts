@@ -11,7 +11,7 @@ dependencies {
 }
 
 // TODO: move into the project
-open class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
+abstract class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Name of the runner
     @get:Input
     val runner: String? by project
@@ -37,7 +37,7 @@ open class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     }
 }
 
-open class PreprocessKotlinJavaCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
+abstract class PreprocessKotlinJavaCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Input directory with files
     @get:Input
     val input: String? by project
@@ -63,7 +63,7 @@ open class PreprocessKotlinJavaCliTask : org.jetbrains.intellij.tasks.RunIdeTask
     }
 }
 
-open class TestOpenKotlinJavaTask : org.jetbrains.intellij.tasks.RunIdeTask() {
+abstract class TestOpenKotlinJavaTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Input directory with files
     @get:Input
     val input: String? by project
