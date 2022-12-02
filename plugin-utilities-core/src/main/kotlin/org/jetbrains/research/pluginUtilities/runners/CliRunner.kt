@@ -62,6 +62,8 @@ abstract class BaseRunner<A : RunnerArgs, P : RunnerArgsParser<A>>(
 
     override fun getCommandName(): String = commandName
 
+    override fun getRequiredModality(): Int = ApplicationStarter.NOT_IN_EDT
+
     /** Runs the specific for each analyzer analysis process using parsed [arguments][args]. */
     abstract fun run(args: A)
 

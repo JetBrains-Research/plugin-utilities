@@ -119,6 +119,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
 //                        projectRoot.path,
 //                        ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
 //                    )
+                ApplicationManager.getApplication().assertIsNonDispatchThread()
                 val indicator = ProgressIndicatorBase()
                 val context = object : CommandLineInspectionProjectConfigurator.ConfiguratorContext {
                     override fun getProgressIndicator() = indicator
