@@ -1,20 +1,38 @@
 package org.jetbrains.research.pluginUtilities.openRepository
 
+import com.intellij.conversion.ConversionListener
+import com.intellij.diagnostic.ThreadDumper
+import com.intellij.ide.CommandLineInspectionProgressReporter
+import com.intellij.ide.CommandLineInspectionProjectConfigurator
 import com.intellij.ide.impl.OpenProjectTask
+import com.intellij.ide.startup.impl.StartupManagerImpl
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.importing.ImportSpecBuilder
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.progress.ProcessCanceledException
+import com.intellij.openapi.progress.util.ProgressIndicatorBase
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ex.ProjectManagerEx
+import com.intellij.openapi.startup.StartupManager
+import com.intellij.openapi.util.registry.Registry
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.serviceContainer.AlreadyDisposedException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import org.jetbrains.idea.maven.project.MavenProjectsManager
+import org.jetbrains.plugins.gradle.GradleCommandLineProjectConfigurator
 import org.jetbrains.plugins.gradle.util.GradleConstants
 import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+import java.util.function.Predicate
 
 /**
  * Locates projects in repositories and opens them.
@@ -57,6 +75,32 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
         return allProjectsOpenedSuccessfully
     }
 
+    private val listener = object : ConversionListener, CommandLineInspectionProgressReporter {
+        override fun reportError(message: String) {
+            logger.warn("PROGRESS: $message")
+        }
+
+        override fun reportMessage(minVerboseLevel: Int, message: String) {
+            logger.info("PROGRESS: $message")
+        }
+
+        override fun error(message: String) {
+            logger.warn("PROGRESS: $message")
+        }
+
+        override fun conversionNeeded() {
+            logger.info("PROGRESS: Project conversion is needed")
+        }
+
+        override fun successfullyConverted(backupDir: Path) {
+            logger.info("PROGRESS: Project was successfully converted")
+        }
+
+        override fun cannotWriteToFiles(readonlyFiles: List<Path>) {
+            logger.info("PROGRESS: Project conversion failed for:\n" + readonlyFiles.joinToString("\n"))
+        }
+    }
+
     private fun openSingleProject(projectRoot: File): Project {
         logger.info("Opening project ${projectRoot.name}")
         var resultProject: Project? = null
@@ -76,10 +120,19 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
                     MavenProjectsManager.getInstance(project).importProjects()
                 } else {
                     logger.info("IDEA detected Gradle build system")
-                    ExternalSystemUtil.refreshProject(
-                        projectRoot.path,
-                        ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
-                    )
+//                    ExternalSystemUtil.refreshProject(
+//                        projectRoot.path,
+//                        ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
+//                    )
+                    val indicator = ProgressIndicatorBase()
+                    val context = object : CommandLineInspectionProjectConfigurator.ConfiguratorContext {
+                        override fun getProgressIndicator() = indicator
+                        override fun getLogger() = listener
+                        override fun getProjectPath() = Path.of(projectRoot.path)
+                        override fun getFilesFilter(): Predicate<Path> = Predicate { true }
+                        override fun getVirtualFilesFilter(): Predicate<VirtualFile> = Predicate { true }
+                    }
+                    GradleCommandLineProjectConfigurator().configureProject(project, context)
                 }
                 resultProject = project
             }
