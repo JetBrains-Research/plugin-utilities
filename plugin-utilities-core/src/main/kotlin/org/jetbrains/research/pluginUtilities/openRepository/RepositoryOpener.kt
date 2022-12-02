@@ -20,6 +20,7 @@ import com.intellij.serviceContainer.AlreadyDisposedException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import okhttp3.internal.wait
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.GradleCommandLineProjectConfigurator
 import org.jetbrains.plugins.gradle.util.GradleConstants
@@ -113,33 +114,38 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
                 ) ?: throw ProjectOpeningException(
                     "`openProject` returned null"
                 )
-
-                if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
-                    logger.info("IDEA detected Maven build system")
-                    MavenProjectsManager.getInstance(project).scheduleImportAndResolve()
-                    MavenProjectsManager.getInstance(project).importProjects()
-                } else {
-                    logger.info("IDEA detected Gradle build system")
-//                    ExternalSystemUtil.refreshProject(
-//                        projectRoot.path,
-//                        ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
-//                    )
-                    val indicator = ProgressIndicatorBase()
-                    val context = object : CommandLineInspectionProjectConfigurator.ConfiguratorContext {
-                        override fun getProgressIndicator() = indicator
-                        override fun getLogger() = listener
-                        override fun getProjectPath() = Path.of(projectRoot.path)
-                        override fun getFilesFilter(): Predicate<Path> = Predicate { true }
-                        override fun getVirtualFilesFilter(): Predicate<VirtualFile> = Predicate { true }
-                    }
-                    GradleCommandLineProjectConfigurator().configureProject(project, context)
-                }
                 resultProject = project
             }
         } catch (e: ProcessCanceledException) {
             throw ProjectOpeningException("Process was canceled", e)
         }
 
+        require(resultProject != null) { "Project was null for an unknown reason."}
+        logger.info("Project ${resultProject!!.name} opened")
+
+        val future = ApplicationManager.getApplication().executeOnPooledThread {
+            if (MavenProjectsManager.getInstance(resultProject!!).isMavenizedProject) {
+                logger.info("IDEA detected Maven build system")
+                MavenProjectsManager.getInstance(resultProject!!).scheduleImportAndResolve()
+                MavenProjectsManager.getInstance(resultProject!!).importProjects()
+            } else {
+                logger.info("IDEA detected Gradle build system")
+//                    ExternalSystemUtil.refreshProject(
+//                        projectRoot.path,
+//                        ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
+//                    )
+                val indicator = ProgressIndicatorBase()
+                val context = object : CommandLineInspectionProjectConfigurator.ConfiguratorContext {
+                    override fun getProgressIndicator() = indicator
+                    override fun getLogger() = listener
+                    override fun getProjectPath() = Path.of(projectRoot.path)
+                    override fun getFilesFilter(): Predicate<Path> = Predicate { true }
+                    override fun getVirtualFilesFilter(): Predicate<VirtualFile> = Predicate { true }
+                }
+                GradleCommandLineProjectConfigurator().configureProject(resultProject!!, context)
+            }
+        }
+        future.get()
         return resultProject?.also {
             logger.info("Project ${it.name} opened")
         } ?: throw ProjectOpeningException(
