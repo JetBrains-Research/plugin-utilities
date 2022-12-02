@@ -1,38 +1,23 @@
 package org.jetbrains.research.pluginUtilities.openRepository
 
 import com.intellij.conversion.ConversionListener
-import com.intellij.diagnostic.ThreadDumper
 import com.intellij.ide.CommandLineInspectionProgressReporter
 import com.intellij.ide.CommandLineInspectionProjectConfigurator
 import com.intellij.ide.impl.OpenProjectTask
-import com.intellij.ide.startup.impl.StartupManagerImpl
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.externalSystem.importing.ImportSpecBuilder
-import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.progress.util.ProgressIndicatorBase
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ex.ProjectManagerEx
-import com.intellij.openapi.startup.StartupManager
-import com.intellij.openapi.util.registry.Registry
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.serviceContainer.AlreadyDisposedException
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
-import okhttp3.internal.wait
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.GradleCommandLineProjectConfigurator
-import org.jetbrains.plugins.gradle.util.GradleConstants
 import org.jetbrains.research.pluginUtilities.BuildSystem
 import org.jetbrains.research.pluginUtilities.collectBuildSystemRoots
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 import java.util.function.Predicate
 
 /**
@@ -120,7 +105,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) {
             throw ProjectOpeningException("Process was canceled", e)
         }
 
-        require(resultProject != null) { "Project was null for an unknown reason."}
+        require(resultProject != null) { "Project was null for an unknown reason." }
         logger.info("Project ${resultProject!!.name} opened")
 
         val future = ApplicationManager.getApplication().executeOnPooledThread {
