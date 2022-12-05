@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 LABEL desc="Docker container for building and testing plugin-utilities"
 
 # Install OpenJDK11
-RUN apt-get update && apt-get install -y openjdk-11-jdk
+RUN apt-get update && apt-get install -y openjdk-17-jdk
 
 # Install Git and Curl and Unzip
 RUN apt -y install git-all curl unzip

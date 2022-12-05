@@ -11,15 +11,15 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    container: furetur/plugin-utilities
+    container: nastyabirillo/plugin-utilities:1.0
     steps:
       - uses: actions/checkout@v2
 
-      # Setup Java 11 environment for the next steps
+      # Setup Java 17 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
 
       # Cache Gradle dependencies
       # Cache Gradle Wrapper
@@ -38,13 +38,13 @@ jobs:
   open-java-mocks:
     needs: setup
     runs-on: ubuntu-latest
-    container: furetur/plugin-utilities
+    container: nastyabirillo/plugin-utilities:1.0
     steps:
-      # Setup Java 11 environment for the next steps
+      # Setup Java 17 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
 
       - uses: actions/checkout@v2
 

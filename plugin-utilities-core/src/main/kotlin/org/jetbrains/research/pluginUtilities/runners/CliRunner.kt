@@ -55,12 +55,17 @@ object IORunnerArgsParser : RunnerArgsParser<IORunnerArgs> {
  * @param P the type of the command line arguments parser.
  */
 abstract class BaseRunner<A : RunnerArgs, P : RunnerArgsParser<A>>(
-    private val commandName: String,
+    private val runnerName: String,
     private val parser: P
 ) : ApplicationStarter {
     private val logger = Logger.getInstance(javaClass)
 
-    override fun getCommandName(): String = commandName
+    @Deprecated("Specify it as `id` for extension definition in a plugin descriptor")
+    override val commandName: String
+        get() = runnerName
+
+    override val requiredModality: Int
+        get() = ApplicationStarter.NOT_IN_EDT
 
     /** Runs the specific for each analyzer analysis process using parsed [arguments][args]. */
     abstract fun run(args: A)

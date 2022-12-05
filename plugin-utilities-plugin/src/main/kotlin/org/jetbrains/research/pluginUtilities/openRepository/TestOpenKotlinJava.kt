@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
 
 object TestOpenJavaStarter : ApplicationStarter {
-    override fun getCommandName(): String = "testOpenKotlinJava"
 
-    override fun main(args: MutableList<String>) {
+    @Deprecated("Specify it as `id` for extension definition in a plugin descriptor")
+    override val commandName: String
+        get() = "testOpenKotlinJava"
+
+    override fun main(args: List<String>) {
         TestOpenJavaCommand().main(args.drop(1))
     }
 }
