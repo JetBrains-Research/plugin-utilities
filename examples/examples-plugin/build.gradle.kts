@@ -1,7 +1,7 @@
 group = rootProject.group
 version = rootProject.version
 
-open class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
+abstract class IOCliTask : org.jetbrains.intellij.tasks.RunIdeTask() {
     // Name of the runner
     @get:Input
     val runner: String? by project
