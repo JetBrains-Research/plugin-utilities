@@ -24,6 +24,8 @@ class PreprocessKotlinJavaCommand : CliktCommand(name = "preprocessKotlinJava") 
 }
 
 object PreprocessKotlinJavaStarter : ApplicationStarter {
-    override fun getCommandName(): String = "preprocessKotlinJava"
-    override fun main(args: MutableList<String>) = PreprocessKotlinJavaCommand().main(args.drop(1))
+    @Deprecated("Specify it as `id` for extension definition in a plugin descriptor")
+    override val commandName: String
+        get() = "preprocessKotlinJava"
+    override fun main(args: List<String>) = PreprocessKotlinJavaCommand().main(args.drop(1))
 }
