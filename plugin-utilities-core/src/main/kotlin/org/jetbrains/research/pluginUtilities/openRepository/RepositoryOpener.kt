@@ -118,7 +118,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
         return project
     }
 
-    private fun openSingleProject(repositoryRoot: Path, action: (Project) -> Boolean): Boolean {
+    fun openSingleProject(repositoryRoot: Path, action: (Project) -> Boolean): Boolean {
         val disposable = Disposer.newDisposable()
         try {
             val project = openSingleProjectWithoutResolve(repositoryRoot, disposable)
