@@ -11,6 +11,7 @@ fun RepositoryOpener.assertRepositoryOpens(repositoryDirectory: File) {
         if (!it.hasResolvedDependencies) {
             throw AssertionError("Project ${it.name} has no resolved dependencies")
         }
+        return@openRepository true
     }
     if (!allProjectsWereOpenedSuccessfully) {
         throw AssertionError("Some projects in the repository were not opened successfully")
