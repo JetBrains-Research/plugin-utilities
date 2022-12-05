@@ -118,6 +118,19 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
         return project
     }
 
+    private fun openSingleProject(repositoryRoot: Path, action: (Project) -> Boolean): Boolean {
+        val disposable = Disposer.newDisposable()
+        try {
+            val project = openSingleProjectWithoutResolve(repositoryRoot, disposable)
+            project ?: return false
+
+            action(project)
+            return true
+        } finally {
+            Disposer.dispose(disposable)
+        }
+    }
+
     /**
      * Function to close project. The close should be forced to avoid physical changes to data.
      */
