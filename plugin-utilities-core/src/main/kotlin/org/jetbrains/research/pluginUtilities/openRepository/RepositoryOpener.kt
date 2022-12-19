@@ -65,7 +65,8 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
 
     fun openProjectWithResolve(
         repositoryRoot: Path,
-        action: (Project) -> Boolean
+        action: (Project) -> Boolean,
+        configurator: (Project) -> CommandLineInspectionProjectConfigurator,
     ): Boolean {
         val disposable = Disposer.newDisposable()
         try {
@@ -75,14 +76,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
             val future = ApplicationManager.getApplication().executeOnPooledThread<Project> {
                 ApplicationManager.getApplication().assertIsNonDispatchThread()
                 val context = RepositoryOpenerConfiguratorContext(repositoryRoot)
-                val configurator = if (MavenProjectsManager.getInstance(project).isMavenizedProject) {
-                    logger.info("IDEA detected Maven build system")
-                    MavenCommandLineInspectionProjectConfigurator()
-                } else {
-                    logger.info("IDEA detected Gradle build system")
-                    GradleCommandLineProjectConfigurator()
-                }
-                project.resolve(configurator, context)
+                project.resolve(configurator(project), context)
                 project
             }
             future.get() ?: run {
@@ -97,6 +91,27 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
             Disposer.dispose(disposable)
         }
     }
+
+    fun openMavenOrGradleProjectWithResolve(
+        repositoryRoot: Path,
+        action: (Project) -> Boolean,
+    ): Boolean {
+        return openProjectWithResolve(repositoryRoot, action) {
+            if (MavenProjectsManager.getInstance(it).isMavenizedProject) {
+                logger.info("IDEA detected Maven build system")
+                MavenCommandLineInspectionProjectConfigurator()
+            } else {
+                logger.info("IDEA detected Gradle build system")
+                GradleCommandLineProjectConfigurator()
+            }
+        }
+    }
+
+    // TODO: delete it
+    fun openProjectWithResolve(
+        repositoryRoot: Path,
+        action: (Project) -> Boolean,
+    ) = openMavenOrGradleProjectWithResolve(repositoryRoot, action)
 
     private fun waitForInvokeLaterActivities() {
         ApplicationManager.getApplication().invokeAndWait(
