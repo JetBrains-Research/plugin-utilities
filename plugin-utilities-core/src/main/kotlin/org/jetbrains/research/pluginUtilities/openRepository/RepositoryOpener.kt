@@ -66,7 +66,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
     fun openProjectWithResolve(
         repositoryRoot: Path,
         action: (Project) -> Boolean,
-        configurator: (Project) -> CommandLineInspectionProjectConfigurator,
+        configurator: (Project) -> CommandLineInspectionProjectConfigurator
     ): Boolean {
         val disposable = Disposer.newDisposable()
         try {
@@ -94,7 +94,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
 
     fun openMavenOrGradleProjectWithResolve(
         repositoryRoot: Path,
-        action: (Project) -> Boolean,
+        action: (Project) -> Boolean
     ): Boolean {
         return openProjectWithResolve(repositoryRoot, action) {
             if (MavenProjectsManager.getInstance(it).isMavenizedProject) {
@@ -110,7 +110,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
     // TODO: delete it
     fun openProjectWithResolve(
         repositoryRoot: Path,
-        action: (Project) -> Boolean,
+        action: (Project) -> Boolean
     ) = openMavenOrGradleProjectWithResolve(repositoryRoot, action)
 
     private fun waitForInvokeLaterActivities() {
