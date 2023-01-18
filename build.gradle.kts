@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
-import java.io.*
 
 group = "org.jetbrains.research.pluginUtilities"
 version = "1.0"
@@ -60,12 +59,11 @@ allprojects {
 
 fun getLocalProperty(key: String, file: String = "local.properties"): String? {
     val properties = Properties()
-    val localProperties = File(file)
-    if (localProperties.isFile) {
-        InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
-            properties.load(reader)
-        }
-    } else error("File from not found")
+
+    File("local.properties")
+        .takeIf { it.isFile }
+        ?.let { properties.load(it.inputStream()) }
+        ?: println("File $file with properties not found")
 
     return properties.getProperty(key, null)
 }
@@ -81,7 +79,7 @@ configure(subprojects.filter { it.name != "plugin-utilities-plugin" }) {
 
     publishing {
         publications {
-            create<MavenPublication>("maven") {
+            register<MavenPublication>("maven") {
                 groupId = "org.jetbrains.research"
                 artifactId = subprojectName
                 version = "1.0"
