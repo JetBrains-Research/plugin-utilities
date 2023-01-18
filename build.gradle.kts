@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
+import java.io.*
 
 group = "org.jetbrains.research.pluginUtilities"
 version = "1.0"
@@ -8,9 +10,6 @@ val platformType: String by project
 val platformDownloadSources: String by project
 val platformPlugins: String by project
 val pluginName: String by project
-
-val spaceUsername: String by project
-val spacePassword: String by project
 
 plugins {
     java
@@ -59,21 +58,44 @@ allprojects {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "org.jetbrains.research"
-            artifactId = "plugin-utilities"
-            version = "1.0"
-            from(components["java"])
+fun getLocalProperty(key: String, file: String = "local.properties"): String? {
+    val properties = Properties()
+    val localProperties = File(file)
+    if (localProperties.isFile) {
+        InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
+            properties.load(reader)
         }
-    }
-    repositories {
-        maven {
-            url = uri("https://packages.jetbrains.team/maven/p/big-code/bigcode")
-            credentials {
-                username = spaceUsername
-                password = spacePassword
+    } else error("File from not found")
+
+    return properties.getProperty(key, null)
+}
+
+val spaceUsername = getLocalProperty("spaceUsername")
+val spacePassword = getLocalProperty("spacePassword")
+
+configure(subprojects.filter { it.name != "plugin-utilities-plugin" }) {
+
+    apply(plugin = "maven-publish")
+
+    val subprojectName = this.name
+
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = "org.jetbrains.research"
+                artifactId = subprojectName
+                version = "1.0"
+                from(components["java"])
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri("https://packages.jetbrains.team/maven/p/big-code/bigcode")
+                credentials {
+                    username = spaceUsername
+                    password = spacePassword
+                }
             }
         }
     }

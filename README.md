@@ -11,6 +11,27 @@ The project consists of several modules:
 
 ## Getting started as a library
 
+### From maven repo
+
+```kotlin
+repositories {
+   mavenCentral()
+   mavenLocal()
+   maven("https://packages.jetbrains.team/maven/p/big-code/bigcode")
+}
+
+val utilitiesProjectName = "org.jetbrains.research.plugin-utilities"
+val utilitiesProjectVersion = "1.0"
+
+dependencies {
+    implementation("$utilitiesProjectName-core:$utilitiesProjectVersion")
+    implementation("$utilitiesProjectName-test:$utilitiesProjectVersion")
+    implementation("$utilitiesProjectName-python:$utilitiesProjectVersion")
+}
+```
+
+### From github repo
+
 You can use this plugin as a library in your plugin by importing it in `settings.gradle.kts` and `build.gradle.kts files`:
 
 1. File `settings.gradle.kts` (in this example we add two modules, but you can import others):
@@ -94,3 +115,11 @@ path/to/output/
 1. Clone this [repository](https://github.com/JetBrains-Research/plugin-utilies-mock-data) somewhere. We will call that folder `<mockdata>`. 
 2. Set the environment variable `JAVA_MOCK_PROJECTS=<mockdata>/java_mock_projects`.
 3. Now you can build _plugin-utilities_ by running `./gradlew build`. 
+
+
+## Publishing to maven repo
+```shell
+gradle plugin-utilities-core:publish
+gradle plugin-utilities-python:publish
+gradle plugin-utilities-test:publish
+```
