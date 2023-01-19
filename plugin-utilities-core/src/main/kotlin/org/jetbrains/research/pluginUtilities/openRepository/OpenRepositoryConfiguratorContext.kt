@@ -6,7 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import java.nio.file.Path
 import java.util.function.Predicate
 
-class RepositoryOpenerConfiguratorContext(
+class OpenRepositoryConfiguratorContext(
     private val repositoryRoot: Path,
     private val indicator: ProgressIndicatorBase = ProgressIndicatorBase(),
     private val filesFilter: Predicate<Path> = Predicate { true },
