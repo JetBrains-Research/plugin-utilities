@@ -4,7 +4,6 @@ include(
     "plugin-utilities-plugin",
     "plugin-utilities-core",
     "plugin-utilities-test",
-    "plugin-utilities-python"
 )
 
 pluginManagement {
