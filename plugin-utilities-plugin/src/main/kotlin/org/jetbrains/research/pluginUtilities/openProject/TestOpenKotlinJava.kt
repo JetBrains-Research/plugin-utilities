@@ -50,7 +50,7 @@ class TestOpenJavaCommand : CliktCommand() {
     }
 
     private fun openRepositories() {
-        val projectOpener = ProjectOpenerProvider.getKotlinJavaProjectOpener()
+        val projectOpener = getKotlinJavaProjectOpener()
 
         for (projectRoot in preprocessOutput.subdirectories) {
             projectOpener.assertProjectOpensWithResolve(projectRoot.toPath())

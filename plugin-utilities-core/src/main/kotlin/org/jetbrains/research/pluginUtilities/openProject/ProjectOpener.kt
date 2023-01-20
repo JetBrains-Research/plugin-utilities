@@ -108,12 +108,14 @@ class ProjectOpener(
         context: OpenProjectConfiguratorContext,
     ): Project? {
         val future = ApplicationManager.getApplication().executeOnPooledThread<Project?> {
+            logger.info("Applying configurator ${configurator.name} to resolve project ${project.name}")
             configurator.preConfigureProject(project, context)
             configurator.configureProject(project, context)
+
             ApplicationManager.getApplication().invokeAndWait(
                 {}, ModalityState.any()
             )
-            logger.info("Project ${project.name} was successfully configured!")
+            logger.info("Project ${project.name} was successfully resolved with configurator ${configurator.name}!")
             project
         }
 
