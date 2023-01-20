@@ -1,4 +1,4 @@
-package org.jetbrains.research.pluginUtilities.openRepository.python
+package org.jetbrains.research.pluginUtilities.preprocessing.python
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project

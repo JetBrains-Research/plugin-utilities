@@ -1,4 +1,4 @@
-package org.jetbrains.research.pluginUtilities.openRepository
+package org.jetbrains.research.pluginUtilities.openProject
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.option
@@ -50,10 +50,10 @@ class TestOpenJavaCommand : CliktCommand() {
     }
 
     private fun openRepositories() {
-        val repositoryOpener = getKotlinJavaRepositoryOpener()
+        val projectOpener = ProjectOpenerProvider.getKotlinJavaProjectOpener()
 
-        for (repositoryRoot in preprocessOutput.subdirectories) {
-            repositoryOpener.assertRepositoryOpens(repositoryRoot)
+        for (projectRoot in preprocessOutput.subdirectories) {
+            projectOpener.assertProjectOpensWithResolve(projectRoot.toPath())
         }
     }
 }
