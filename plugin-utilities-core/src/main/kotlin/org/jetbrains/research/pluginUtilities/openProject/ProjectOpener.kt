@@ -12,13 +12,11 @@ import org.jetbrains.research.pluginUtilities.preprocessing.ProjectPreprocessor
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
-
 typealias ProjectBasedInstanceProvider<T> = ((Project) -> T)
-
 
 class ProjectOpener(
     private val projectPreprocessorProvider: ProjectBasedInstanceProvider<ProjectPreprocessor>? = null,
-    private val projectConfiguratorProvider: ProjectBasedInstanceProvider<CommandLineInspectionProjectConfigurator>? = null,
+    private val projectConfiguratorProvider: ProjectBasedInstanceProvider<CommandLineInspectionProjectConfigurator>? = null
 ) : InspectionApplicationBase() {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -33,16 +31,14 @@ class ProjectOpener(
     fun open(
         projectRoot: Path,
         disposable: Disposable,
-        resolve: Boolean = false,
+        resolve: Boolean = false
     ): Project? {
-
         // Opening project without resolve
         var project = openProjectWithoutResolve(projectRoot, disposable) ?: run {
             logger.info("Failed to open project from $projectRoot.")
             return null
         }
         logger.info("Project ${project.name} was successfully opened without resolve.")
-
 
         // Preprocessing project without resolve (e.x. selling env)
         project = projectPreprocessorProvider?.let {
@@ -56,7 +52,6 @@ class ProjectOpener(
             project
         }
         logger.info("Project ${project.name} was successfully preprocessed.")
-
 
         // Resolving project if required
         if (resolve) {
@@ -114,7 +109,7 @@ class ProjectOpener(
     private fun resolveProject(
         project: Project,
         configurator: CommandLineInspectionProjectConfigurator,
-        context: OpenProjectConfiguratorContext,
+        context: OpenProjectConfiguratorContext
     ): Project? {
         val future = ApplicationManager.getApplication().executeOnPooledThread<Project?> {
             logger.info("Applying configurator ${configurator.name} to resolve project ${project.name}")
@@ -122,7 +117,8 @@ class ProjectOpener(
             configurator.configureProject(project, context)
 
             ApplicationManager.getApplication().invokeAndWait(
-                {}, ModalityState.any()
+                {},
+                ModalityState.any()
             )
             logger.info("Project ${project.name} was successfully resolved with configurator ${configurator.name}!")
             project

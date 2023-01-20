@@ -7,7 +7,6 @@ import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.openapi.util.Disposer
 import java.nio.file.Path
 
-
 /**
  * Opens, applies given action and closes project.
  * @param projectRoot root of the project to apply action
@@ -17,7 +16,7 @@ import java.nio.file.Path
 fun ProjectOpener.openAndApply(
     projectRoot: Path,
     resolve: Boolean = false,
-    action: (Project) -> Boolean,
+    action: (Project) -> Boolean
 ): Boolean {
     val disposable = Disposer.newDisposable()
     try {

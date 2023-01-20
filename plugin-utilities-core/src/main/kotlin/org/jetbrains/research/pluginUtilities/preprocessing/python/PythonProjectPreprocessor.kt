@@ -16,7 +16,6 @@ import java.io.InputStreamReader
 import java.nio.file.Path
 import java.nio.file.Paths
 
-
 class PythonProjectPreprocessor(private val venvRoot: Path? = null) : ProjectPreprocessor {
 
     private val logger = LoggerFactory.getLogger(javaClass)

@@ -7,7 +7,6 @@ import org.jetbrains.plugins.gradle.GradleCommandLineProjectConfigurator
 import org.jetbrains.research.pluginUtilities.preprocessing.python.PythonProjectPreprocessor
 import java.nio.file.Path
 
-
 /**
  * Configures project opener for kotlin and java project.
  * @returns project opener which can be used for kotlin and java project opening.
