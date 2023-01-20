@@ -8,6 +8,12 @@ import com.intellij.openapi.util.Disposer
 import java.nio.file.Path
 
 
+/**
+ * Opens, applies given action and closes project.
+ * @param projectRoot root of the project to apply action
+ * @param action the function that is called for each opened project
+ * @returns true if and only if project was processed successfully.
+ */
 fun ProjectOpener.openAndApply(
     projectRoot: Path,
     resolve: Boolean = false,
@@ -25,6 +31,11 @@ fun ProjectOpener.openAndApply(
     }
 }
 
+/**
+ * Checks that project in given path opens and resolves correctly.
+ * @param projectRoot root of the project to be checked
+ * @returns opened project of null if project opening process was failed.
+ */
 fun ProjectOpener.assertProjectOpensWithResolve(projectRoot: Path) {
     this.openAndApply(projectRoot, true) {
         if (!it.hasResolvedDependencies) {

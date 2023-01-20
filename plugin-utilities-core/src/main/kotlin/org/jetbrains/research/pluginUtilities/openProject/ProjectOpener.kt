@@ -22,6 +22,14 @@ class ProjectOpener(
 ) : InspectionApplicationBase() {
 
     private val logger = LoggerFactory.getLogger(javaClass)
+
+    /**
+     * Opens project from provided root.
+     * @param projectRoot root of the project
+     * @param disposable an object to be disposed before project close
+     * @param resolve the flag which is true if project needs to be resolved, false otherwise
+     * @returns opened project or null if project opening process fails.
+     */
     fun open(
         projectRoot: Path,
         disposable: Disposable,
@@ -33,7 +41,7 @@ class ProjectOpener(
             logger.info("Failed to open project from $projectRoot.")
             return null
         }
-        logger.info("Project ${project.name} was successfully opened.")
+        logger.info("Project ${project.name} was successfully opened without resolve.")
 
 
         // Preprocessing project without resolve (e.x. selling env)
@@ -44,7 +52,7 @@ class ProjectOpener(
                 return null
             }
         } ?: run {
-            logger.info("Preprocessor not provided, skip preprocessing step.")
+            logger.info("Preprocessor not provided, skipping preprocessing step.")
             project
         }
         logger.info("Project ${project.name} was successfully preprocessed.")
@@ -70,6 +78,7 @@ class ProjectOpener(
         return project
     }
 
+    /** Force closes given project. */
     fun forceCloseProject(project: Project) {
         try {
             ProjectManagerEx.getInstanceEx().forceCloseProject(project)
