@@ -21,7 +21,7 @@ class PythonProjectPreprocessor(private val venvRoot: Path? = null) : ProjectPre
     private val logger = LoggerFactory.getLogger(javaClass)
 
     companion object {
-        private const val PYTHON_VENV_FOLDER_NAME = ".venv"
+        private const val PYTHON_VENV_FOLDER_NAME = "venv"
     }
 
     /**
@@ -34,13 +34,13 @@ class PythonProjectPreprocessor(private val venvRoot: Path? = null) : ProjectPre
     override fun preprocess(project: Project): Project? {
         val localVenv = project.basePath?.let { Paths.get(it, PYTHON_VENV_FOLDER_NAME) }
 
-        logger.info("Trying to use a global venv.")
+        logger.info("Trying to use a global venv $venvRoot.")
         if (tryToSetupVenv(project, venvRoot)) {
             logger.info("The analysis will run with the global venv ($venvRoot).")
             return project
         }
 
-        logger.info("Trying to use a local venv.")
+        logger.info("Trying to use a local venv $localVenv.")
         if (tryToSetupVenv(project, localVenv)) {
             logger.info("The analysis will run with the local venv ($localVenv).")
             return project
