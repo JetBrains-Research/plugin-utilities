@@ -44,7 +44,9 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
 
         for (projectRoot in projectRoots) {
             try {
-                openProjectWithResolve(Path.of(projectRoot.path), action)
+                if (!openProjectWithResolve(Path.of(projectRoot.path), action)) {
+                    allProjectsOpenedSuccessfully = false
+                }
             } catch (e: Exception) {
                 logger.error("Failed to open project ${projectRoot.path}", e)
                 allProjectsOpenedSuccessfully = false
