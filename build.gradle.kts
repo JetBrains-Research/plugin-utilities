@@ -1,8 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
+val projectVersion = "2.0.2"
+
 group = "org.jetbrains.research.pluginUtilities"
-version = "2.0.2"
+version = projectVersion
 
 val platformVersion: String by project
 val platformType: String by project
@@ -82,7 +84,7 @@ configure(subprojects.filter { it.name != "plugin-utilities-plugin" }) {
             register<MavenPublication>("maven") {
                 groupId = "org.jetbrains.research"
                 artifactId = subprojectName
-                version = "2.0.2"
+                version = projectVersion
                 from(components["java"])
             }
         }
