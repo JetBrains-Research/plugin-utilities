@@ -86,8 +86,11 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
                 return false
             }
 
-            println("The project ${project.name} was open successfåully")
+            println("The project ${project.name} was open successfully")
             action(project)
+
+            println("The action was performed, try to close the project")
+            closeSingleProject(project)
             return true
         } finally {
             Disposer.dispose(disposable)
@@ -151,7 +154,7 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
     /**
      * Function to close project. The close should be forced to avoid physical changes to data.
      */
-    private fun closeSingleProject(project: Project) =
+    fun closeSingleProject(project: Project) =
         try {
             ProjectManagerEx.getInstanceEx().forceCloseProject(project)
         } catch (e: AlreadyDisposedException) {
