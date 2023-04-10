@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
 group = "org.jetbrains.research.pluginUtilities"
-version = "1.0"
+version = "2.0.2"
 
 val platformVersion: String by project
 val platformType: String by project
