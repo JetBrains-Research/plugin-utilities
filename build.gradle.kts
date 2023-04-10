@@ -82,7 +82,7 @@ configure(subprojects.filter { it.name != "plugin-utilities-plugin" }) {
             register<MavenPublication>("maven") {
                 groupId = "org.jetbrains.research"
                 artifactId = subprojectName
-                version = "1.1"
+                version = "2.0.2"
                 from(components["java"])
             }
         }
