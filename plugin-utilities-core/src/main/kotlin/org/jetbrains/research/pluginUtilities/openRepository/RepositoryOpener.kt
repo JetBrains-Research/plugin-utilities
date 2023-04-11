@@ -145,6 +145,9 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
             project ?: return false
 
             action(project)
+
+            println("The action was performed, try to close the project")
+            closeSingleProject(project)
             return true
         } finally {
             Disposer.dispose(disposable)
