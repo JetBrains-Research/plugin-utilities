@@ -159,7 +159,10 @@ class RepositoryOpener(private val acceptedBuildSystems: List<BuildSystem>) : In
      */
     fun closeSingleProject(project: Project) =
         try {
-            ProjectManagerEx.getInstanceEx().forceCloseProject(project)
+            ApplicationManager.getApplication().invokeLater {
+                ApplicationManager.getApplication().assertIsDispatchThread()
+                ProjectManagerEx.getInstanceEx().forceCloseProject(project)
+            }
         } catch (e: AlreadyDisposedException) {
             // TODO: figure out why this happened
             logger.error("Failed to close project", e)

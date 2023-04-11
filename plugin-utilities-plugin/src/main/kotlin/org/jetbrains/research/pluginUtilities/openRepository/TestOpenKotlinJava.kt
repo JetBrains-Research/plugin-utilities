@@ -17,6 +17,9 @@ object TestOpenJavaStarter : ApplicationStarter {
     override val commandName: String
         get() = "testOpenKotlinJava"
 
+    override val requiredModality: Int
+        get() = ApplicationStarter.NOT_IN_EDT
+
     override fun main(args: List<String>) {
         TestOpenJavaCommand().main(args.drop(1))
     }
