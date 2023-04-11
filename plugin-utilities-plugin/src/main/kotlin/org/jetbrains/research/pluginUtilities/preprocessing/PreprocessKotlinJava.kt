@@ -27,5 +27,9 @@ object PreprocessKotlinJavaStarter : ApplicationStarter {
     @Deprecated("Specify it as `id` for extension definition in a plugin descriptor")
     override val commandName: String
         get() = "preprocessKotlinJava"
+
+    override val requiredModality: Int
+        get() = ApplicationStarter.NOT_IN_EDT
+
     override fun main(args: List<String>) = PreprocessKotlinJavaCommand().main(args.drop(1))
 }

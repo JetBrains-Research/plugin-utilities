@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
-val projectVersion = "2.0.3"
+val projectVersion = "2.0.4"
 
 group = "org.jetbrains.research.pluginUtilities"
 version = projectVersion
