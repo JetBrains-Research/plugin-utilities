@@ -52,7 +52,6 @@ fun setSdkToProject(project: Project, venvRoot: String) {
     sdkConfigurer.setProjectSdk(sdk)
 }
 
-
 fun takeDownSdkFromProject(project: Project, sdk: Sdk) {
     val projectManager = ProjectRootManager.getInstance(project)
     val sdkConfigurer = SdkConfigurer(project, projectManager)
