@@ -23,9 +23,7 @@ open class ParametrizedBaseWithPythonSdkTest(testDataRoot: String) : Parametrize
     }
 
     override fun tearDown() {
-        ApplicationManager.getApplication().runWriteAction {
-            ProjectJdkTable.getInstance().removeJdk(sdk)
-        }
+        tearDownSdk()
         super.tearDown()
     }
 
@@ -35,5 +33,12 @@ open class ParametrizedBaseWithPythonSdkTest(testDataRoot: String) : Parametrize
         sdk = PythonMockSdk(testDataPath).create("3.8")
         val sdkConfigurer = SdkConfigurer(project, projectManager)
         sdkConfigurer.setProjectSdk(sdk)
+    }
+
+    private fun tearDownSdk() {
+        val project = myFixture.project
+        val projectManager = ProjectRootManager.getInstance(project)
+        val sdkConfigurer = SdkConfigurer(project, projectManager)
+        sdkConfigurer.takeDownProjectSdk(sdk)
     }
 }
