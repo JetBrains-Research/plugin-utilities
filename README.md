@@ -15,18 +15,16 @@ The project consists of several modules:
 
 ```kotlin
 repositories {
-   mavenCentral()
-   mavenLocal()
    maven("https://packages.jetbrains.team/maven/p/big-code/bigcode")
 }
 
-val utilitiesProjectName = "org.jetbrains.research.plugin-utilities"
 val utilitiesProjectVersion = "1.0"
+val utilitiesProjectId = "org.jetbrains.research"
 
 dependencies {
-    implementation("$utilitiesProjectName-core:$utilitiesProjectVersion")
-    implementation("$utilitiesProjectName-test:$utilitiesProjectVersion")
-    implementation("$utilitiesProjectName-python:$utilitiesProjectVersion")
+    implementation("$utilitiesProjectId:plugin-utilities-core:$utilitiesProjectVersion")
+    implementation("$utilitiesProjectId:plugin-utilities-test:$utilitiesProjectVersion")
+    implementation("$utilitiesProjectId:plugin-utilities-python:$utilitiesProjectVersion")
 }
 ```
 

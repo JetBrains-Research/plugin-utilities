@@ -30,9 +30,28 @@ class SdkConfigurer(
         }
     }
 
+    private fun disconnectSdkFromProject(sdk: Sdk) {
+        logger.info("Disconnecting SDK from project files")
+        val jdkTable = ProjectJdkTable.getInstance()
+
+        ApplicationManager.getApplication().runWriteAction {
+            jdkTable.removeJdk(sdk)
+            projectManager.projectSdk = null
+        }
+        project.pythonSdk = null
+        project.modules.forEach { module ->
+            module.pythonSdk = null
+        }
+    }
+
     fun setProjectSdk(sdk: Sdk) {
         logger.info("Setting up SDK: $sdk for project $project")
         connectSdkWithProject(sdk)
         PythonSdkType.getInstance().setupSdkPaths(sdk)
+    }
+
+    fun takeDownProjectSdk(sdk: Sdk) {
+        logger.info("Taking down SDK: $sdk for project $project")
+        disconnectSdkFromProject(sdk)
     }
 }
