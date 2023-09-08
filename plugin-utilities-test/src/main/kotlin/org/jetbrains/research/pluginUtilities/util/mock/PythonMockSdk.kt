@@ -1,4 +1,4 @@
-package org.jetbrains.research.pluginUtilities.sdk
+package org.jetbrains.research.pluginUtilities.util.mock
 
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.projectRoots.SdkAdditionalData

@@ -1,11 +1,11 @@
-package org.jetbrains.research.pluginUtilities.openRepository
+package org.jetbrains.research.pluginUtilities.openProject
 
 import com.intellij.conversion.ConversionListener
 import com.intellij.ide.CommandLineInspectionProgressReporter
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
-object RepositoryOpenerListener : ConversionListener, CommandLineInspectionProgressReporter {
+object ProjectOpenerListener : ConversionListener, CommandLineInspectionProgressReporter {
     private val logger = LoggerFactory.getLogger(javaClass)
     override fun reportError(message: String) {
         logger.warn("PROGRESS: $message")
